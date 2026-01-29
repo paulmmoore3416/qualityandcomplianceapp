@@ -1,0 +1,89 @@
+{
+  "name": "medtech-compliance-suite",
+  "version": "1.0.0",
+  "description": "Professional Medical Device Manufacturing Metrics & Compliance Tool",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:electron": "tsc --project tsconfig.node.json",
+    "preview": "vite preview",
+    "electron:dev": "npm run build:electron && concurrently \"vite\" \"wait-on http://localhost:5173 && electron .\"",
+    "electron:build": "npm run build:electron && npm run build && electron-builder",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "medical-device",
+    "compliance",
+    "ISO-13485",
+    "ISO-14971",
+    "quality-management",
+    "metrics"
+  ],
+  "author": "Quality & Compliance Team",
+  "license": "MIT",
+  "dependencies": {
+    "@types/bcryptjs": "^3.0.0",
+    "bcryptjs": "^3.0.3",
+    "clsx": "^2.1.0",
+    "date-fns": "^3.3.1",
+    "lucide-react": "^0.330.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.0",
+    "recharts": "^2.12.0",
+    "tailwind-merge": "^2.2.1",
+    "uuid": "^9.0.1",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@types/uuid": "^9.0.8",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.17",
+    "concurrently": "^8.2.2",
+    "electron": "^40.0.0",
+    "electron-builder": "^26.6.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "jsdom": "^27.4.0",
+    "postcss": "^8.4.35",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.medtech.compliance",
+    "productName": "MedTech Compliance Suite",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.business"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

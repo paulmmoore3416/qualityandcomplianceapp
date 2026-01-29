@@ -1,0 +1,98 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+release/
+out/
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+*.env
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Electron
+.electron/
+electron-builder.yml
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Sensitive data - NEVER COMMIT THESE
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+credentials/
+*.credentials
+auth-config.json
+oauth-secrets.json
+
+# User data and databases
+*.db
+*.sqlite
+*.sqlite3
+data/
+user-data/
+
+# Backups
+*.backup
+*.bak
+*.old
+
+# Production secrets
+.env.production.local
+production-config.json
+
+# SSH keys
+id_rsa
+id_rsa.pub
+*.pub
+
+# SSL certificates
+*.crt
+*.cer
+
+# API keys and tokens
+api-keys.txt
+tokens.txt
