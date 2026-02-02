@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedTech Compliance Suite | AI-Powered Quality Management for Medical Devices</title>
+  <meta name="description" content="Enterprise-grade QMS software for medical device manufacturers. ISO 13485, FDA 21 CFR Part 820 (QMSR), ISO 14971 compliant. AI-powered compliance automation.">
+  <meta name="keywords" content="medical device compliance, ISO 13485, FDA QMSR, 21 CFR Part 820, quality management system, medical device QMS, ISO 14971, AI compliance">
+  <meta property="og:title" content="MedTech Compliance Suite | AI-Powered QMS">
+  <meta property="og:description" content="Navigate the Feb 2026 FDA QMSR shift with confidence. Enterprise-grade compliance automation for medical device manufacturers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://paulmmoore3416.github.io/qualityandcomplianceapp/">
+  <link rel="canonical" href="https://paulmmoore3416.github.io/qualityandcomplianceapp/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1e40af;
+      --navy-dark: #1e3a8a;
+      --navy-light: #3b82f6;
+      --teal: #0d9488;
+      --teal-dark: #0f766e;
+      --green: #16a34a;
+      --orange: #ea580c;
+      --red: #dc2626;
+      --charcoal: #374151;
+      --slate: #64748b;
+      --cloud: #f8fafc;
+      --white: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--charcoal);
+      line-height: 1.6;
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--navy);
+      font-weight: 800;
+      font-size: 1.125rem;
+    }
+    .nav-logo svg {
+      width: 36px;
+      height: 36px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--slate);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-cta {
+      background: var(--navy);
+      color: var(--white) !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--navy-dark) !important; }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+    }
+    .mobile-menu-btn span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--charcoal);
+      margin: 5px 0;
+      transition: 0.3s;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 10rem 2rem 6rem;
+      background: linear-gradient(135deg, #eff6ff 0%, #f0fdfa 50%, #f8fafc 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(30,64,175,0.04) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, rgba(13,148,136,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-content { max-width: 800px; margin: 0 auto; position: relative; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(30,64,175,0.08);
+      color: var(--navy);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(30,64,175,0.12);
+    }
+    .hero-badge .pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+    .hero h1 {
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--navy-dark);
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span { color: var(--teal); }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--slate);
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.875rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(30,64,175,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--navy-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(30,64,175,0.4);
+    }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--navy);
+      border: 2px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--navy);
+      background: var(--cloud);
+    }
+
+    /* Urgency Banner */
+    .urgency {
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+      color: var(--white);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .urgency-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .urgency h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .urgency p {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      line-height: 1.7;
+    }
+    .urgency-date {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      font-weight: 700;
+      margin: 0 0.15rem;
+    }
+
+    /* Section */
+    .section {
+      padding: 5rem 2rem;
+    }
+    .section-alt { background: var(--cloud); }
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 3.5rem;
+    }
+    .section-header .label {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+    .section-header h2 {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 800;
+      color: var(--navy-dark);
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+    .section-header p {
+      font-size: 1.05rem;
+      color: var(--slate);
+      line-height: 1.7;
+    }
+
+    /* Feature Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.25s;
+    }
+    .feature-card:hover {
+      border-color: var(--navy-light);
+      box-shadow: 0 8px 30px rgba(30,64,175,0.08);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, rgba(30,64,175,0.08), rgba(13,148,136,0.08));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      color: var(--navy);
+    }
+    .feature-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+    .feature-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-top: 0.75rem;
+    }
+    .tag-iso { background: #dbeafe; color: var(--navy); }
+    .tag-fda { background: #d1fae5; color: #065f46; }
+    .tag-ai { background: #fef3c7; color: #92400e; }
+
+    /* Standards Grid */
+    .standards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .standard-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .standard-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 0.5rem;
+    }
+    .standard-card p {
+      font-size: 0.85rem;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+    .standard-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Validation Section */
+    .validation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .validation-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+    .validation-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .validation-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .validation-card li {
+      font-size: 0.9rem;
+      color: var(--slate);
+      padding: 0.35rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    .validation-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 0;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--slate);
+      font-weight: 500;
+    }
+
+    /* CTA */
+    .cta {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 50%, var(--teal-dark) 100%);
+      color: var(--white);
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+    .cta h2 {
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    .cta p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+    .cta .btn-primary {
+      background: var(--white);
+      color: var(--navy);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    }
+    .cta .btn-primary:hover {
+      background: var(--cloud);
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
+    .footer {
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 3rem 2rem 2rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+    .footer h4 {
+      color: var(--white);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .footer p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+    .footer ul {
+      list-style: none;
+    }
+    .footer li { margin-bottom: 0.5rem; }
+    .footer a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .footer a:hover { color: var(--white); }
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .mobile-menu-btn { display: block; }
+      .hero { padding: 8rem 1.5rem 4rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .features-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="8" fill="#1e40af"/>
+          <path d="M10 18h16M18 10v16M13 13l10 10M23 13l-10 10" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+          <path d="M18 12v12M12 18h12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="18" cy="18" r="3" fill="white" opacity="0.9"/>
+        </svg>
+        MedTech Compliance Suite
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#compliance">Compliance</a></li>
+        <li><a href="#validation">Validation</a></li>
+        <li><a href="#qmsr">QMSR Ready</a></li>
+        <li><a href="#contact" class="nav-cta">Request Demo</a></li>
+      </ul>
+      <button class="mobile-menu-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse"></span>
+        FDA QMSR Now In Effect &mdash; February 2, 2026
+      </div>
+      <h1>Navigate the New FDA QMSR with <span>AI-Powered</span> Compliance</h1>
+      <p>
+        The FDA's Quality Management System Regulation harmonizing 21 CFR Part 820 with ISO 13485:2016 is now live.
+        MedTech Compliance Suite gives manufacturers the tools to bridge this regulatory shift today.
+      </p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Schedule a Demo
+        </a>
+        <a href="#features" class="btn btn-secondary">
+          Explore Features
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Urgency Banner -->
+  <section class="urgency">
+    <div class="urgency-inner">
+      <h2>The QMSR Is Here. Is Your QMS Ready?</h2>
+      <p>
+        As of <span class="urgency-date">February 2, 2026</span>, FDA inspectors now audit against ISO 13485:2016.
+        Manufacturers relying on legacy 21 CFR Part 820 workflows face compliance gaps.
+        Our platform was built specifically to close those gaps &mdash; with built-in standards mapping,
+        automated gap analysis, and audit-ready documentation.
+      </p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section section-alt" id="features">
+    <div class="section-header">
+      <span class="label">Platform Features</span>
+      <h2>Everything You Need for Regulatory Excellence</h2>
+      <p>A complete quality management system designed for medical device manufacturers navigating today's complex regulatory landscape.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
+        </div>
+        <h3>CAPA Management</h3>
+        <p>Track corrective and preventive actions from identification through verification of effectiveness, with automated escalation and deadline tracking.</p>
+        <span class="feature-tag tag-iso">ISO 13485</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h3>Risk Management</h3>
+        <p>ISO 14971-compliant risk matrices with severity/probability scoring, hazard analysis, and risk control verification workflows.</p>
+        <span class="feature-tag tag-iso">ISO 14971</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+        </div>
+        <h3>Document Control</h3>
+        <p>Electronic document management with version control, approval workflows, and 21 CFR Part 11 compliant electronic signatures and audit trails.</p>
+        <span class="feature-tag tag-fda">21 CFR Part 11</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </div>
+        <h3>Change Control</h3>
+        <p>Structured change management with impact assessment, approval routing, and implementation tracking to maintain design and process integrity.</p>
+        <span class="feature-tag tag-iso">ISO 13485</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+        </div>
+        <h3>Compliance Metrics &amp; KPIs</h3>
+        <p>Real-time dashboards tracking CAPA closure rates, NCR trends, audit findings, training compliance, and supplier quality scores.</p>
+        <span class="feature-tag tag-ai">Analytics</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 0110 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/><path d="M2 12h20"/><path d="M12 2a15 15 0 014 10 15 15 0 01-4 10 15 15 0 01-4-10 15 15 0 014-10z"/></svg>
+        </div>
+        <h3>Post-Market Surveillance</h3>
+        <p>Complaint handling, vigilance reporting, and adverse event tracking aligned with MDR/IVDR and FDA post-market requirements.</p>
+        <span class="feature-tag tag-fda">FDA/MDR</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><path d="M7 8h2m2 0h2m2 0h2"/><path d="M7 12h10"/></svg>
+        </div>
+        <h3>AI-Powered Agents</h3>
+        <p>Local LLM integration for intelligent document review, gap analysis, and automated compliance recommendations &mdash; your data never leaves your infrastructure.</p>
+        <span class="feature-tag tag-ai">AI / LLM</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Training Management</h3>
+        <p>Competency-based training tracking with automated notifications, certification management, and training effectiveness verification.</p>
+        <span class="feature-tag tag-iso">ISO 13485</span>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3>Immutable Audit Trail</h3>
+        <p>Every record change logs who, when, and why. Records are never deleted &mdash; only deactivated. Full 21 CFR Part 11 and ALCOA+ compliance.</p>
+        <span class="feature-tag tag-fda">21 CFR Part 11</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compliance Standards -->
+  <section class="section" id="compliance">
+    <div class="section-header">
+      <span class="label">Regulatory Coverage</span>
+      <h2>Built for the Standards That Matter</h2>
+      <p>Pre-configured compliance frameworks so you can focus on building great devices, not deciphering regulations.</p>
+    </div>
+    <div class="standards-grid">
+      <div class="standard-card">
+        <div class="standard-icon">&#x1F3DB;</div>
+        <h3>FDA QMSR / 21 CFR 820</h3>
+        <p>Fully aligned with the new Quality Management System Regulation harmonizing Part 820 with ISO 13485:2016, effective February 2, 2026.</p>
+      </div>
+      <div class="standard-card">
+        <div class="standard-icon">&#x1F4CB;</div>
+        <h3>ISO 13485:2016</h3>
+        <p>Complete quality management system requirements for medical device design, development, production, and post-market activities.</p>
+      </div>
+      <div class="standard-card">
+        <div class="standard-icon">&#x26A0;</div>
+        <h3>ISO 14971:2019</h3>
+        <p>Risk management process for medical devices including hazard identification, risk estimation, evaluation, and control.</p>
+      </div>
+      <div class="standard-card">
+        <div class="standard-icon">&#x1F512;</div>
+        <h3>21 CFR Part 11</h3>
+        <p>Electronic records and signatures with audit trails, access controls, and data integrity per ALCOA+ principles.</p>
+      </div>
+      <div class="standard-card">
+        <div class="standard-icon">&#x1F30D;</div>
+        <h3>EU MDR 2017/745</h3>
+        <p>European Medical Device Regulation support for post-market surveillance, clinical evaluation, and UDI requirements.</p>
+      </div>
+      <div class="standard-card">
+        <div class="standard-icon">&#x2699;</div>
+        <h3>IEC 62304</h3>
+        <p>Software lifecycle process guidance for medical device software development, maintenance, and risk management.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="section section-alt">
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-number">60%</div>
+        <div class="stat-label">Reduction in Compliance Overhead</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">6+</div>
+        <div class="stat-label">Regulatory Standards Built-In</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Audit Trail Coverage</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Data Sent to Cloud (Local AI)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Validation Packs -->
+  <section class="section" id="validation">
+    <div class="section-header">
+      <span class="label">Audit-Ready</span>
+      <h2>Pre-Built Validation Kits &mdash; Your Key Differentiator</h2>
+      <p>Regulated manufacturers must validate every QMS tool. We provide IQ/OQ/PQ documentation so your team doesn't have to build it from scratch.</p>
+    </div>
+    <div class="validation-grid">
+      <div class="validation-card">
+        <h3>&#x1F4E5; Installation Qualification (IQ)</h3>
+        <ul>
+          <li>System requirements verification checklist</li>
+          <li>Infrastructure configuration confirmation</li>
+          <li>Software version and dependency verification</li>
+          <li>Network and access control setup validation</li>
+        </ul>
+      </div>
+      <div class="validation-card">
+        <h3>&#x2699; Operational Qualification (OQ)</h3>
+        <ul>
+          <li>Feature-level test scripts for every module</li>
+          <li>Role-based access control verification</li>
+          <li>Audit trail integrity testing</li>
+          <li>Workflow and notification testing</li>
+        </ul>
+      </div>
+      <div class="validation-card">
+        <h3>&#x1F3AF; Performance Qualification (PQ)</h3>
+        <ul>
+          <li>End-to-end process validation scripts</li>
+          <li>Load and stress testing protocols</li>
+          <li>Data integrity verification under real conditions</li>
+          <li>User acceptance testing templates</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- QMSR Section -->
+  <section class="section section-alt" id="qmsr">
+    <div class="section-header">
+      <span class="label">QMSR Readiness</span>
+      <h2>Purpose-Built for the Feb 2026 FDA QMSR Transition</h2>
+      <p>The regulatory landscape just changed. Here's how we help manufacturers adapt.</p>
+    </div>
+    <div class="features-grid" style="max-width:900px; margin:0 auto;">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        </div>
+        <h3>Gap Analysis Engine</h3>
+        <p>Automated mapping between legacy 21 CFR Part 820 processes and the new ISO 13485:2016-aligned QMSR requirements. Identify exactly what needs to change.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+        </div>
+        <h3>Transition Timeline Tracking</h3>
+        <p>Monitor your QMSR transition progress with milestone tracking, task assignments, and automated reminders so nothing falls through the cracks.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="8" y1="10" x2="16" y2="10"/></svg>
+        </div>
+        <h3>Standards Cross-Reference</h3>
+        <p>Interactive cross-reference between ISO 13485 clauses, legacy 820 sections, and your existing QMS documentation. Know exactly where you stand.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+        </div>
+        <h3>Audit Preparation Tools</h3>
+        <p>Generate audit-ready reports demonstrating QMSR compliance. Pre-formatted for FDA inspector review with complete traceability documentation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <h2>Ready to Modernize Your Compliance Workflow?</h2>
+    <p>
+      Join medical device manufacturers who are using MedTech Compliance Suite to navigate
+      the QMSR transition with confidence and efficiency.
+    </p>
+    <a href="mailto:paulmmoore3416@gmail.com?subject=MedTech%20Compliance%20Suite%20-%20Demo%20Request&body=I'm%20interested%20in%20learning%20more%20about%20MedTech%20Compliance%20Suite.%20Please%20schedule%20a%20demo." class="btn btn-primary">
+      Request a Demo
+    </a>
+    <p style="margin-top:1.5rem; font-size:0.85rem; opacity:0.7;">
+      Or email us directly at paulmmoore3416@gmail.com
+    </p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <h4>MedTech Compliance Solutions LLC</h4>
+        <p>AI-powered quality management for medical device manufacturers. Helping companies achieve regulatory excellence through intelligent automation.</p>
+        <p style="margin-top:1rem;">St. Louis, MO</p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#compliance">Compliance</a></li>
+          <li><a href="#validation">Validation Kits</a></li>
+          <li><a href="#qmsr">QMSR Ready</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Standards</h4>
+        <ul>
+          <li><a href="#compliance">ISO 13485</a></li>
+          <li><a href="#compliance">ISO 14971</a></li>
+          <li><a href="#compliance">21 CFR Part 11</a></li>
+          <li><a href="#compliance">EU MDR</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="mailto:paulmmoore3416@gmail.com">Contact Us</a></li>
+          <li><a href="https://github.com/paulmmoore3416/qualityandcomplianceapp">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 MedTech Compliance Solutions LLC. All rights reserved.</span>
+      <span>AI-Powered Compliance, Human-Centered Care</span>
+    </div>
+  </footer>
+
+</body>
+</html>
