@@ -99,17 +99,13 @@ export const LoginView: React.FC = () => {
             </button>
           </form>
 
-          {/* Demo Credentials */}
+          {/* Demo Credentials Notice */}
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-xs font-semibold text-blue-900 mb-2">
-              Demo Credentials:
+              Demo Mode
             </p>
             <div className="text-xs text-blue-800 space-y-1">
-              <p><strong>Demo:</strong> demo / demo2026</p>
-              <p><strong>Admin:</strong> admin / admin123</p>
-              <p><strong>QA Manager:</strong> qa_manager / qa123</p>
-              <p><strong>Engineer:</strong> engineer / eng123</p>
-              <p><strong>Auditor:</strong> auditor / audit123</p>
+              <p>Demo accounts are available in development. Check documentation for setup instructions.</p>
             </div>
           </div>
         </div>

@@ -61,7 +61,7 @@ We take security vulnerabilities seriously. If you discover a security issue, pl
 
 Instead, please report security issues via:
 
-1. **Email**: [paulmmoore3416@gmail.com](mailto:paulmmoore3416@gmail.com)
+1. **Email**: Please check the repository settings or contact information
    - Subject line: `[SECURITY] Brief description of issue`
    - Include detailed information about the vulnerability
    - Attach proof-of-concept code if applicable

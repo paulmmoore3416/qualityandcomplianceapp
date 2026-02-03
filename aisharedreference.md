@@ -83,15 +83,7 @@ npm run electron:dev
 ```
 
 ### Demo Accounts
-The application includes 5 pre-configured accounts for testing:
-
-| Role | Username | Password | Permissions |
-|------|----------|----------|-------------|
-| **Demo** | demo | demo2026 | Full access (no admin) |
-| **Admin** | admin | admin123 | Full system access |
-| **QA Manager** | qa_manager | qa123 | Quality operations |
-| **Engineer** | engineer | eng123 | Engineering & NCR |
-| **Auditor** | auditor | audit123 | Read-only + exports |
+The application includes pre-configured accounts for testing during development. Demo credentials should be configured in a local `.env` file and never committed to the repository. See the development setup guide for details on configuring test accounts.
 
 ### SSO Authentication (Demo Mode)
 Currently supports mock SSO authentication for:

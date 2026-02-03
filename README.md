@@ -261,17 +261,9 @@ npm run electron:dev
 
 ## 💻 Usage
 
-### Default Login Credentials
+### Login
 
-The application comes with pre-configured demo accounts for testing:
-
-| Role | Username | Password | Access Level |
-|------|----------|----------|--------------|
-| **Demo** | `demo` | `demo2026` | Full access (no admin) |
-| **Admin** | `admin` | `admin123` | Full system access |
-| **QA Manager** | `qa_manager` | `qa123` | Quality operations |
-| **Engineer** | `engineer` | `eng123` | Engineering & NCR |
-| **Auditor** | `auditor` | `audit123` | Read-only + exports |
+The application requires authentication. For development and testing, configure demo credentials in a local `.env` file. See `INSTALLATION.md` for setup instructions.
 
 ### SSO Authentication
 

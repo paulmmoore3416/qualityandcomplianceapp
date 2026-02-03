@@ -18,10 +18,12 @@ interface AuthState {
 }
 
 // Mock user data - in production, this would come from a backend
+// NOTE: For security, demo credentials are loaded from environment variables during development
+// NEVER hardcode passwords in production code
 const MOCK_USERS: { username: string; password: string; user: User }[] = [
   {
-    username: 'admin',
-    password: 'admin123',
+    username: process.env.REACT_APP_DEMO_ADMIN_USERNAME || 'admin-dev',
+    password: process.env.REACT_APP_DEMO_ADMIN_PASSWORD || 'dev-password',
     user: {
       id: 'user-001',
       username: 'admin',
@@ -77,8 +79,8 @@ const MOCK_USERS: { username: string; password: string; user: User }[] = [
     },
   },
   {
-    username: 'qa_manager',
-    password: 'qa123',
+    username: process.env.REACT_APP_DEMO_QA_USERNAME || 'qa_manager-dev',
+    password: process.env.REACT_APP_DEMO_QA_PASSWORD || 'dev-password',
     user: {
       id: 'user-002',
       username: 'qa_manager',
@@ -128,8 +130,8 @@ const MOCK_USERS: { username: string; password: string; user: User }[] = [
     },
   },
   {
-    username: 'engineer',
-    password: 'eng123',
+    username: process.env.REACT_APP_DEMO_ENG_USERNAME || 'engineer-dev',
+    password: process.env.REACT_APP_DEMO_ENG_PASSWORD || 'dev-password',
     user: {
       id: 'user-003',
       username: 'engineer',
@@ -167,8 +169,8 @@ const MOCK_USERS: { username: string; password: string; user: User }[] = [
     },
   },
   {
-    username: 'auditor',
-    password: 'audit123',
+    username: process.env.REACT_APP_DEMO_AUDITOR_USERNAME || 'auditor-dev',
+    password: process.env.REACT_APP_DEMO_AUDITOR_PASSWORD || 'dev-password',
     user: {
       id: 'user-004',
       username: 'auditor',
@@ -202,8 +204,8 @@ const MOCK_USERS: { username: string; password: string; user: User }[] = [
     },
   },
   {
-    username: 'demo',
-    password: 'demo2026',
+    username: process.env.REACT_APP_DEMO_USER_USERNAME || 'demo-dev',
+    password: process.env.REACT_APP_DEMO_USER_PASSWORD || 'dev-password',
     user: {
       id: 'user-005',
       username: 'demo',
