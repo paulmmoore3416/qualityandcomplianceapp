@@ -5,7 +5,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [react(), ...(process.env.ANALYZE ? [visualizer({ open: true, filename: 'bundle-analysis.html' })] : [])],
-  base: './',
+  base: '/qualityandcomplianceapp/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
