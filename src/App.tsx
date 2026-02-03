@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import { useAppStore } from './stores/app-store';
 import { useAuthStore } from './stores/auth-store';
+import { initializeKeyboardShortcuts } from './stores/keyboard-store';
 import Layout from './components/Layout';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import ToastContainer from './components/ToastContainer';
+import CommandPalette from './components/CommandPalette';
 import React, { Suspense } from 'react';
 const Dashboard = React.lazy(() => import('./components/views/Dashboard'));
 const MetricsView = React.lazy(() => import('./components/views/MetricsView'));
@@ -19,7 +23,11 @@ const DocumentsView = React.lazy(() => import('./components/views/DocumentsView'
 const AdminView = React.lazy(() => import('./components/views/AdminView'));
 const AIAgentsView = React.lazy(() => import('./components/views/AIAgentsView'));
 const ValidationView = React.lazy(() => import('./components/views/ValidationView'));
+const AnalyticsDashboard = React.lazy(() => import('./components/views/AnalyticsDashboard'));
 import { EnhancedLoginView } from './components/views/EnhancedLoginView';
+
+// Initialize keyboard shortcuts on app load
+initializeKeyboardShortcuts();
 
 function App() {
   const { activeView, loadData } = useAppStore();
@@ -31,7 +39,12 @@ function App() {
 
   // Show login screen if not authenticated
   if (!isAuthenticated) {
-    return <EnhancedLoginView />;
+    return (
+      <ErrorBoundary>
+        <EnhancedLoginView />
+        <ToastContainer />
+      </ErrorBoundary>
+    );
   }
 
   const renderView = () => {
@@ -68,17 +81,23 @@ function App() {
         return <SettingsView />;
       case 'validation':
         return <ValidationView />;
+      case 'analytics':
+        return <AnalyticsDashboard />;
       default:
         return <Dashboard />;
     }
   };
 
   return (
-    <Layout>
-      <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-        {renderView()}
-      </Suspense>
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+          {renderView()}
+        </Suspense>
+      </Layout>
+      <CommandPalette />
+      <ToastContainer />
+    </ErrorBoundary>
   );
 }
 

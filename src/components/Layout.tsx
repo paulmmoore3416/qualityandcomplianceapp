@@ -12,7 +12,7 @@ export default function Layout({ children }: LayoutProps) {
   const { sidebarOpen, auditMode } = useAppStore();
 
   return (
-    <div className="flex h-screen bg-surface-50">
+    <div className="flex h-screen bg-surface-50 dark:bg-gh-canvas">
       {/* Sidebar */}
       <Sidebar />
 
@@ -32,7 +32,7 @@ export default function Layout({ children }: LayoutProps) {
 
           {/* Compliance Guardrail Sidebar (visible in audit mode) */}
           {auditMode && (
-            <div className="w-80 border-l border-surface-200 bg-white overflow-y-auto">
+            <div className="w-80 border-l border-surface-200 dark:border-gh-border bg-white dark:bg-gh-surface overflow-y-auto">
               <ComplianceGuardrail />
             </div>
           )}

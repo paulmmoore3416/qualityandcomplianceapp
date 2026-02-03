@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Lock, User, AlertCircle, Shield, Github, Chrome, } from 'lucide-react';
+import { Lock, User, AlertCircle, Shield, Github, Chrome, Moon, Sun } from 'lucide-react';
 import { useAuthStore } from '../../stores/auth-store';
+import { useThemeStore } from '../../stores/theme-store';
 
 // Microsoft logo component
 const MicrosoftLogo = () => (
@@ -17,6 +18,7 @@ export const EnhancedLoginView: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const { login, loginWithSSO, isLoading } = useAuthStore();
+  const { theme, toggleTheme } = useThemeStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +57,16 @@ export const EnhancedLoginView: React.FC = () => {
         <div className="absolute top-40 left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
+      {/* Theme Toggle */}
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className="absolute top-6 right-6 z-20 p-2.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-colors"
+        title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      >
+        {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
+
       <div className="max-w-md w-full relative z-10">
         {/* Logo and Title */}
         <div className="text-center mb-8">
@@ -73,7 +85,7 @@ export const EnhancedLoginView: React.FC = () => {
         </div>
 
         {/* Login Card with transparency */}
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
+        <div className="bg-white/90 dark:bg-gh-surface/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gh-border">
           <h2 className="text-2xl font-semibold text-surface-900 mb-6 text-center">
             Sign In to Your Account
           </h2>
@@ -137,7 +149,7 @@ export const EnhancedLoginView: React.FC = () => {
               <div className="w-full border-t border-surface-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white/90 text-surface-500 font-medium">Or continue with</span>
+              <span className="px-4 bg-white/90 dark:bg-gh-surface/95 text-surface-500 font-medium">Or continue with</span>
             </div>
           </div>
 
@@ -147,7 +159,7 @@ export const EnhancedLoginView: React.FC = () => {
               type="button"
               onClick={() => handleSSOLogin('google')}
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 border-2 border-surface-200 text-surface-700 font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+              className="w-full flex items-center justify-center gap-3 bg-white dark:bg-gh-overlay hover:bg-gray-50 dark:hover:bg-gh-border border-2 border-surface-200 dark:border-gh-border text-surface-700 font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
             >
               <Chrome className="w-5 h-5 text-red-500" />
               <span>Sign in with Google</span>
@@ -175,7 +187,7 @@ export const EnhancedLoginView: React.FC = () => {
           </div>
 
           {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+          <div className="mt-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gh-blue-strong/10 dark:to-gh-overlay border border-blue-200 dark:border-gh-blue-strong/30 rounded-lg">
             <p className="text-xs font-semibold text-blue-900 mb-3 flex items-center gap-2">
               <Shield className="w-4 h-4" />
               Demo Credentials Available:

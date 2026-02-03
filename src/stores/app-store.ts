@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
 import {
   MetricValue,
@@ -10,12 +11,28 @@ import {
   Lot,
   DashboardMetric,
   ValidationReport,
+  Supplier,
+  TrainingRecord,
+  ChangeControl,
+  Complaint,
+  DocumentMetadata,
 } from '../types';
 import { METRICS_CONFIG, getMetricStatus } from '../data/metrics-config';
 import {
   generateComplianceAlerts,
   createAuditEntry,
 } from '../lib/compliance-engine';
+
+// Inter-module link type
+export interface ModuleLink {
+  sourceType: 'capa' | 'ncr' | 'risk' | 'validation' | 'change_control' | 'supplier' | 'complaint';
+  sourceId: string;
+  targetType: 'capa' | 'ncr' | 'risk' | 'validation' | 'change_control' | 'supplier' | 'complaint' | 'document';
+  targetId: string;
+  linkType: 'triggered_by' | 'resolves' | 'references' | 'supersedes' | 'related_to';
+  createdAt: Date;
+  createdBy: string;
+}
 
 interface AppState {
   // Data
@@ -27,10 +44,16 @@ interface AppState {
   lifecycleRecords: LifecycleRecord[];
   lots: Lot[];
   validationReports: ValidationReport[];
+  suppliers: Supplier[];
+  trainingRecords: TrainingRecord[];
+  changeControls: ChangeControl[];
+  complaints: Complaint[];
+  documents: DocumentMetadata[];
+  moduleLinks: ModuleLink[];
 
   // UI State
   sidebarOpen: boolean;
-  activeView: 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation';
+  activeView: 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics';
   auditMode: boolean;
   selectedMetricId: string | null;
 
@@ -80,6 +103,27 @@ interface AppState {
   getValidationStats: () => { total: number; draft: number; inProgress: number; underReview: number; approved: number; passRate: number; byType: Record<string, number> };
   getValidationReportById: (id: string) => ValidationReport | undefined;
 
+  // Supplier Actions
+  addSupplier: (supplier: Omit<Supplier, 'id' | 'createdAt'>) => void;
+  updateSupplier: (id: string, updates: Partial<Supplier>) => void;
+  getSupplierStats: () => { total: number; approved: number; conditional: number; critical: number };
+
+  // Training Actions
+  addTrainingRecord: (record: Omit<TrainingRecord, 'id'>) => void;
+  updateTrainingRecord: (id: string, updates: Partial<TrainingRecord>) => void;
+  getTrainingStats: () => { total: number; completed: number; overdue: number; complianceRate: number };
+
+  // Change Control Actions
+  addChangeControl: (cc: Omit<ChangeControl, 'id' | 'createdAt'>) => void;
+  updateChangeControl: (id: string, updates: Partial<ChangeControl>) => void;
+  getChangeControlStats: () => { total: number; pending: number; approved: number; implemented: number };
+
+  // Inter-Module Linking
+  addModuleLink: (link: Omit<ModuleLink, 'createdAt'>) => void;
+  removeModuleLink: (sourceType: string, sourceId: string, targetType: string, targetId: string) => void;
+  getLinkedEntities: (entityType: string, entityId: string) => ModuleLink[];
+  getLinksForEntity: (entityType: string, entityId: string) => { incoming: ModuleLink[]; outgoing: ModuleLink[] };
+
   // Data Persistence
   loadData: () => Promise<void>;
   saveData: () => Promise<void>;
@@ -88,7 +132,9 @@ interface AppState {
   exportAuditReport: () => string;
 }
 
-export const useAppStore = create<AppState>((set, get) => ({
+export const useAppStore = create<AppState>()(
+  persist(
+    (set, get) => ({
   // Initial Data
   metricValues: [],
   riskAssessments: [],
@@ -98,6 +144,12 @@ export const useAppStore = create<AppState>((set, get) => ({
   lifecycleRecords: [],
   lots: [],
   validationReports: [],
+  suppliers: [],
+  trainingRecords: [],
+  changeControls: [],
+  complaints: [],
+  documents: [],
+  moduleLinks: [],
 
   // Initial UI State
   sidebarOpen: true,
@@ -401,8 +453,134 @@ export const useAppStore = create<AppState>((set, get) => ({
     return get().validationReports.find((r) => r.id === id);
   },
 
-  // Data Persistence
+  // Supplier Actions
+  addSupplier: (supplier) => {
+    const newSupplier: Supplier = {
+      ...supplier,
+      id: uuidv4(),
+      createdAt: new Date(),
+    };
+    set((state) => ({
+      suppliers: [...state.suppliers, newSupplier],
+    }));
+  },
+
+  updateSupplier: (id, updates) => {
+    set((state) => ({
+      suppliers: state.suppliers.map((s) => (s.id === id ? { ...s, ...updates } : s)),
+    }));
+  },
+
+  getSupplierStats: () => {
+    const suppliers = get().suppliers;
+    return {
+      total: suppliers.length,
+      approved: suppliers.filter((s) => s.status === 'Approved').length,
+      conditional: suppliers.filter((s) => s.status === 'Conditional').length,
+      critical: suppliers.filter((s) => s.riskLevel === 'Critical').length,
+    };
+  },
+
+  // Training Actions
+  addTrainingRecord: (record) => {
+    const newRecord: TrainingRecord = {
+      ...record,
+      id: uuidv4(),
+    };
+    set((state) => ({
+      trainingRecords: [...state.trainingRecords, newRecord],
+    }));
+  },
+
+  updateTrainingRecord: (id, updates) => {
+    set((state) => ({
+      trainingRecords: state.trainingRecords.map((r) => (r.id === id ? { ...r, ...updates } : r)),
+    }));
+  },
+
+  getTrainingStats: () => {
+    const records = get().trainingRecords;
+    const completed = records.filter((r) => r.status === 'Completed').length;
+    const overdue = records.filter((r) => r.status === 'Overdue').length;
+    return {
+      total: records.length,
+      completed,
+      overdue,
+      complianceRate: records.length > 0 ? (completed / records.length) * 100 : 100,
+    };
+  },
+
+  // Change Control Actions
+  addChangeControl: (cc) => {
+    const newCC: ChangeControl = {
+      ...cc,
+      id: uuidv4(),
+      createdAt: new Date(),
+    };
+    set((state) => ({
+      changeControls: [...state.changeControls, newCC],
+    }));
+  },
+
+  updateChangeControl: (id, updates) => {
+    set((state) => ({
+      changeControls: state.changeControls.map((c) => (c.id === id ? { ...c, ...updates } : c)),
+    }));
+  },
+
+  getChangeControlStats: () => {
+    const ccs = get().changeControls;
+    return {
+      total: ccs.length,
+      pending: ccs.filter((c) => c.status === 'Pending Review').length,
+      approved: ccs.filter((c) => c.status === 'Approved').length,
+      implemented: ccs.filter((c) => c.status === 'Implemented').length,
+    };
+  },
+
+  // Inter-Module Linking
+  addModuleLink: (link) => {
+    const newLink: ModuleLink = {
+      ...link,
+      createdAt: new Date(),
+    };
+    set((state) => ({
+      moduleLinks: [...state.moduleLinks, newLink],
+    }));
+  },
+
+  removeModuleLink: (sourceType, sourceId, targetType, targetId) => {
+    set((state) => ({
+      moduleLinks: state.moduleLinks.filter(
+        (l) =>
+          !(l.sourceType === sourceType &&
+            l.sourceId === sourceId &&
+            l.targetType === targetType &&
+            l.targetId === targetId)
+      ),
+    }));
+  },
+
+  getLinkedEntities: (entityType, entityId) => {
+    return get().moduleLinks.filter(
+      (l) =>
+        (l.sourceType === entityType && l.sourceId === entityId) ||
+        (l.targetType === entityType && l.targetId === entityId)
+    );
+  },
+
+  getLinksForEntity: (entityType, entityId) => {
+    const links = get().moduleLinks;
+    return {
+      incoming: links.filter((l) => l.targetType === entityType && l.targetId === entityId),
+      outgoing: links.filter((l) => l.sourceType === entityType && l.sourceId === entityId),
+    };
+  },
+
+  // Data Persistence - now handled by Zustand persist middleware
   loadData: async () => {
+    // With persist middleware, data is auto-loaded from localStorage
+    // This method now only handles Electron API for desktop app
     if (window.electronAPI) {
       try {
         const result = await window.electronAPI.loadData('app-state');
@@ -416,60 +594,47 @@ export const useAppStore = create<AppState>((set, get) => ({
             alerts: data.alerts || [],
             lifecycleRecords: data.lifecycleRecords || [],
             lots: data.lots || [],
-            validationReports: (data as Record<string, unknown>).validationReports as ValidationReport[] || [],
+            validationReports: data.validationReports || [],
+            suppliers: data.suppliers || [],
+            trainingRecords: data.trainingRecords || [],
+            changeControls: data.changeControls || [],
+            complaints: data.complaints || [],
+            documents: data.documents || [],
+            moduleLinks: data.moduleLinks || [],
           });
         }
       } catch (error) {
-        console.error('Failed to load data:', error);
-      }
-    } else {
-      // Fallback to localStorage for web
-      try {
-        const saved = localStorage.getItem('medtech-compliance-state');
-        if (saved) {
-          const data = JSON.parse(saved) as Partial<AppState>;
-          set({
-            metricValues: data.metricValues || [],
-            riskAssessments: data.riskAssessments || [],
-            capas: data.capas || [],
-            ncrs: data.ncrs || [],
-            alerts: data.alerts || [],
-            lifecycleRecords: data.lifecycleRecords || [],
-            lots: data.lots || [],
-            validationReports: (data as Record<string, unknown>).validationReports as ValidationReport[] || [],
-          });
-        }
-      } catch (error) {
-        console.error('Failed to load data from localStorage:', error);
+        console.error('Failed to load data from Electron:', error);
       }
     }
   },
 
   saveData: async () => {
-    const state = get();
-    const dataToSave = {
-      metricValues: state.metricValues,
-      riskAssessments: state.riskAssessments,
-      capas: state.capas,
-      ncrs: state.ncrs,
-      alerts: state.alerts,
-      lifecycleRecords: state.lifecycleRecords,
-      lots: state.lots,
-      validationReports: state.validationReports,
-    };
-
+    // With persist middleware, data is auto-saved
+    // This method now only handles Electron API sync
     if (window.electronAPI) {
+      const state = get();
+      const dataToSave = {
+        metricValues: state.metricValues,
+        riskAssessments: state.riskAssessments,
+        capas: state.capas,
+        ncrs: state.ncrs,
+        alerts: state.alerts,
+        lifecycleRecords: state.lifecycleRecords,
+        lots: state.lots,
+        validationReports: state.validationReports,
+        suppliers: state.suppliers,
+        trainingRecords: state.trainingRecords,
+        changeControls: state.changeControls,
+        complaints: state.complaints,
+        documents: state.documents,
+        moduleLinks: state.moduleLinks,
+      };
+
       try {
         await window.electronAPI.saveData('app-state', dataToSave);
       } catch (error) {
-        console.error('Failed to save data:', error);
-      }
-    } else {
-      // Fallback to localStorage
-      try {
-        localStorage.setItem('medtech-compliance-state', JSON.stringify(dataToSave));
-      } catch (error) {
-        console.error('Failed to save data to localStorage:', error);
+        console.error('Failed to save data to Electron:', error);
       }
     }
   },
@@ -488,6 +653,9 @@ export const useAppStore = create<AppState>((set, get) => ({
         openCAPAs: state.capas.filter((c) => c.status !== 'Closed').length,
         openNCRs: state.ncrs.filter((n) => n.status !== 'Closed').length,
         unacknowledgedAlerts: state.getUnacknowledgedAlerts().length,
+        totalSuppliers: state.suppliers.length,
+        trainingComplianceRate: state.getTrainingStats().complianceRate,
+        pendingChangeControls: state.changeControls.filter((c) => c.status === 'Pending Review').length,
       },
       metrics: state.getDashboardMetrics().map((dm) => ({
         id: dm.metric.id,
@@ -500,6 +668,12 @@ export const useAppStore = create<AppState>((set, get) => ({
       capas: state.capas,
       ncrs: state.ncrs,
       riskAssessments: state.riskAssessments,
+      suppliers: state.suppliers.map((s) => ({
+        name: s.name,
+        code: s.supplierCode,
+        status: s.status,
+        riskLevel: s.riskLevel,
+      })),
       validationReports: state.validationReports.map((vr) => ({
         reportNumber: vr.reportNumber,
         title: vr.title,
@@ -511,8 +685,30 @@ export const useAppStore = create<AppState>((set, get) => ({
         testsPassed: vr.testResults.filter((tr) => tr.outcome === 'Pass').length,
         testsFailed: vr.testResults.filter((tr) => tr.outcome === 'Fail').length,
       })),
+      moduleLinks: state.moduleLinks.length,
     };
 
     return JSON.stringify(report, null, 2);
   },
-}));
+}),
+    {
+      name: 'medtech-app-state',
+      partialize: (state) => ({
+        metricValues: state.metricValues,
+        riskAssessments: state.riskAssessments,
+        capas: state.capas,
+        ncrs: state.ncrs,
+        alerts: state.alerts,
+        lifecycleRecords: state.lifecycleRecords,
+        lots: state.lots,
+        validationReports: state.validationReports,
+        suppliers: state.suppliers,
+        trainingRecords: state.trainingRecords,
+        changeControls: state.changeControls,
+        complaints: state.complaints,
+        documents: state.documents,
+        moduleLinks: state.moduleLinks,
+      }),
+    }
+  )
+);

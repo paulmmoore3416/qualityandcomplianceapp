@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -43,6 +44,23 @@ export default {
           300: '#cbd5e1',
           400: '#94a3b8',
         },
+        // GitHub Dark theme colors
+        gh: {
+          canvas: '#0d1117',
+          surface: '#161b22',
+          overlay: '#1c2128',
+          border: '#30363d',
+          'border-muted': '#21262d',
+          text: '#e6edf3',
+          'text-secondary': '#8b949e',
+          'text-tertiary': '#6e7681',
+          blue: '#58a6ff',
+          'blue-strong': '#1f6feb',
+          green: '#3fb950',
+          red: '#f85149',
+          yellow: '#d29922',
+          purple: '#bc8cff',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -52,6 +70,8 @@ export default {
         'card': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
         'card-hover': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
         'elevated': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+        'dark-card': '0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
+        'dark-elevated': '0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4)',
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

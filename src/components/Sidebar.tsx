@@ -21,10 +21,11 @@ import {
   LogOut,
   User,
   FlaskConical,
+  LineChart,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation';
+type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics';
 
 interface NavItem {
   id: ViewType;
@@ -45,6 +46,7 @@ export default function Sidebar() {
 
   const allNavItems: NavItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, category: 'core' },
+    { id: 'analytics', label: 'Analytics', icon: LineChart, category: 'core' },
     { id: 'metrics', label: 'Metrics', icon: BarChart3, category: 'core' },
     { id: 'risk', label: 'Risk Matrix', icon: AlertTriangle, badge: alertCount > 0 ? alertCount : undefined, category: 'core' },
     { id: 'capa', label: 'CAPA', icon: ClipboardCheck, badge: capaStats.overdue > 0 ? capaStats.overdue : undefined, category: 'core' },
@@ -74,12 +76,12 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 h-full bg-white border-r border-surface-200 transition-all duration-300 z-40 flex flex-col',
+        'fixed left-0 top-0 h-full bg-white dark:bg-gh-surface border-r border-surface-200 dark:border-gh-border transition-all duration-300 z-40 flex flex-col',
         sidebarOpen ? 'w-64' : 'w-16'
       )}
     >
       {/* Logo Area */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-surface-200">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-surface-200 dark:border-gh-border">
         {sidebarOpen && (
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
@@ -116,8 +118,8 @@ export default function Sidebar() {
               className={cn(
                 'w-full flex items-center gap-3 px-3 py-2.5 rounded-md transition-colors duration-200',
                 isActive
-                  ? 'bg-primary-50 text-primary-700 font-medium'
-                  : 'text-gray-600 hover:bg-surface-100 hover:text-gray-900'
+                  ? 'bg-primary-50 dark:bg-gh-blue-strong/15 text-primary-700 dark:text-gh-blue font-medium'
+                  : 'text-gray-600 dark:text-gh-text-secondary hover:bg-surface-100 dark:hover:bg-gh-overlay hover:text-gray-900 dark:hover:text-gh-text'
               )}
             >
               <Icon className="w-5 h-5 flex-shrink-0" />
@@ -140,7 +142,7 @@ export default function Sidebar() {
       </nav>
 
       {/* User Profile Section */}
-      <div className="border-t border-surface-200">
+      <div className="border-t border-surface-200 dark:border-gh-border">
         {sidebarOpen ? (
           <div className="p-4">
             <div className="flex items-center gap-3 mb-3">
@@ -179,8 +181,8 @@ export default function Sidebar() {
 
       {/* ISO Standards Badge */}
       {sidebarOpen && (
-        <div className="p-4 border-t border-surface-200">
-          <div className="bg-surface-50 rounded-lg p-3">
+        <div className="p-4 border-t border-surface-200 dark:border-gh-border">
+          <div className="bg-surface-50 dark:bg-gh-overlay rounded-lg p-3">
             <p className="text-xs font-medium text-gray-600 mb-2">Compliance Standards</p>
             <div className="flex flex-wrap gap-1">
               <span className="badge-blue text-[10px]">ISO 13485</span>
