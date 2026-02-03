@@ -9,6 +9,7 @@ import {
   LifecycleRecord,
   Lot,
   DashboardMetric,
+  ValidationReport,
 } from '../types';
 import { METRICS_CONFIG, getMetricStatus } from '../data/metrics-config';
 import {
@@ -25,10 +26,11 @@ interface AppState {
   alerts: ComplianceAlert[];
   lifecycleRecords: LifecycleRecord[];
   lots: Lot[];
+  validationReports: ValidationReport[];
 
   // UI State
   sidebarOpen: boolean;
-  activeView: 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin';
+  activeView: 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation';
   auditMode: boolean;
   selectedMetricId: string | null;
 
@@ -72,6 +74,12 @@ interface AppState {
   addLot: (lot: Omit<Lot, 'id'>) => void;
   updateLot: (id: string, updates: Partial<Lot>) => void;
 
+  // Validation Report Actions
+  addValidationReport: (report: Omit<ValidationReport, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updateValidationReport: (id: string, updates: Partial<ValidationReport>) => void;
+  getValidationStats: () => { total: number; draft: number; inProgress: number; underReview: number; approved: number; passRate: number; byType: Record<string, number> };
+  getValidationReportById: (id: string) => ValidationReport | undefined;
+
   // Data Persistence
   loadData: () => Promise<void>;
   saveData: () => Promise<void>;
@@ -89,6 +97,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   alerts: [],
   lifecycleRecords: [],
   lots: [],
+  validationReports: [],
 
   // Initial UI State
   sidebarOpen: true,
@@ -344,6 +353,54 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().saveData();
   },
 
+  // Validation Report Actions
+  addValidationReport: (report) => {
+    const newReport: ValidationReport = {
+      ...report,
+      id: uuidv4(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    set((state) => ({
+      validationReports: [...state.validationReports, newReport],
+    }));
+    get().saveData();
+  },
+
+  updateValidationReport: (id, updates) => {
+    set((state) => ({
+      validationReports: state.validationReports.map((r) =>
+        r.id === id ? { ...r, ...updates, updatedAt: new Date() } : r
+      ),
+    }));
+    get().saveData();
+  },
+
+  getValidationStats: () => {
+    const reports = get().validationReports;
+    const byType: Record<string, number> = {};
+    reports.forEach((r) => {
+      byType[r.type] = (byType[r.type] || 0) + 1;
+    });
+    const approved = reports.filter((r) => r.status === 'Approved');
+    const passRate = approved.length > 0
+      ? (approved.filter((r) => r.overallConclusion === 'Pass').length / approved.length) * 100
+      : 0;
+    return {
+      total: reports.length,
+      draft: reports.filter((r) => r.status === 'Draft').length,
+      inProgress: reports.filter((r) => r.status === 'In Progress').length,
+      underReview: reports.filter((r) => r.status === 'Under Review').length,
+      approved: approved.length,
+      passRate,
+      byType,
+    };
+  },
+
+  getValidationReportById: (id) => {
+    return get().validationReports.find((r) => r.id === id);
+  },
+
   // Data Persistence
   loadData: async () => {
     if (window.electronAPI) {
@@ -359,6 +416,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             alerts: data.alerts || [],
             lifecycleRecords: data.lifecycleRecords || [],
             lots: data.lots || [],
+            validationReports: (data as Record<string, unknown>).validationReports as ValidationReport[] || [],
           });
         }
       } catch (error) {
@@ -378,6 +436,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             alerts: data.alerts || [],
             lifecycleRecords: data.lifecycleRecords || [],
             lots: data.lots || [],
+            validationReports: (data as Record<string, unknown>).validationReports as ValidationReport[] || [],
           });
         }
       } catch (error) {
@@ -396,6 +455,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       alerts: state.alerts,
       lifecycleRecords: state.lifecycleRecords,
       lots: state.lots,
+      validationReports: state.validationReports,
     };
 
     if (window.electronAPI) {
@@ -440,6 +500,17 @@ export const useAppStore = create<AppState>((set, get) => ({
       capas: state.capas,
       ncrs: state.ncrs,
       riskAssessments: state.riskAssessments,
+      validationReports: state.validationReports.map((vr) => ({
+        reportNumber: vr.reportNumber,
+        title: vr.title,
+        type: vr.type,
+        category: vr.category,
+        status: vr.status,
+        overallConclusion: vr.overallConclusion,
+        testsTotal: vr.testResults.length,
+        testsPassed: vr.testResults.filter((tr) => tr.outcome === 'Pass').length,
+        testsFailed: vr.testResults.filter((tr) => tr.outcome === 'Fail').length,
+      })),
     };
 
     return JSON.stringify(report, null, 2);

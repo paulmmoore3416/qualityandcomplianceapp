@@ -848,6 +848,9 @@ export type Permission =
   | 'manage_users'
   | 'manage_roles'
   | 'system_settings'
+  | 'view_validation'
+  | 'edit_validation'
+  | 'approve_validation'
   | 'export_data'
   | 'import_data';
 
@@ -1197,4 +1200,134 @@ export interface SecurityAlert {
   acknowledged: boolean;
   acknowledgedBy?: string;
   acknowledgedAt?: Date;
+}
+
+// ===============================
+// ENGINEERING VALIDATION (EVT/DVP&R)
+// ===============================
+
+export type ValidationReportType = 'EVT' | 'DVT' | 'PVT' | 'DVP&R';
+export type ValidationCategory = 'Verification' | 'Validation';
+export type ValidationReportStatus = 'Draft' | 'In Progress' | 'Under Review' | 'Approved' | 'Rejected';
+export type TestResultOutcome = 'Pass' | 'Fail' | 'Conditional Pass' | 'Not Tested' | 'In Progress';
+export type TestMethodType = 'Functional' | 'Environmental' | 'Mechanical' | 'Electrical' | 'Software' | 'Biocompatibility' | 'Sterilization' | 'Usability' | 'EMC' | 'Other';
+
+export interface DesignRequirement {
+  id: string;
+  requirementId: string;
+  description: string;
+  category: 'Performance' | 'Safety' | 'Functional' | 'Regulatory' | 'User Need' | 'Environmental';
+  source: string;
+  acceptanceCriteria: string;
+  verificationMethod: 'Test' | 'Inspection' | 'Analysis' | 'Demonstration';
+  isoReferences: ISOMapping[];
+}
+
+export interface TestMethod {
+  id: string;
+  testMethodId: string;
+  title: string;
+  description: string;
+  type: TestMethodType;
+  equipment: string[];
+  procedure: string;
+  acceptanceCriteria: string;
+  environmentalConditions?: string;
+  isoReferences: ISOMapping[];
+}
+
+export interface TestResult {
+  id: string;
+  testMethodId: string;
+  requirementId: string;
+  sampleId?: string;
+  measuredValue?: string;
+  unit?: string;
+  acceptanceCriteria: string;
+  outcome: TestResultOutcome;
+  rawData?: string;
+  notes?: string;
+  testedBy: string;
+  testedAt: Date;
+  reviewedBy?: string;
+  reviewedAt?: Date;
+}
+
+export interface ValidationReport {
+  id: string;
+  reportNumber: string;
+  title: string;
+  type: ValidationReportType;
+  category: ValidationCategory;
+  status: ValidationReportStatus;
+  version: string;
+  author: string;
+  reviewers: string[];
+  approvers: string[];
+
+  // Section 1: Objective/Purpose
+  objective: string;
+
+  // Section 2: Device Under Test
+  deviceUnderTest: {
+    name: string;
+    partNumber: string;
+    revision: string;
+    serialNumbers?: string[];
+    lotNumbers?: string[];
+    description: string;
+    softwareVersion?: string;
+  };
+
+  // Section 3: Test Methods & Setup
+  testMethods: TestMethod[];
+
+  // Section 4: Requirements & Standards
+  requirements: DesignRequirement[];
+
+  // Section 5: Results & Data
+  testResults: TestResult[];
+
+  // Section 6: Pass/Fail Conclusion
+  overallConclusion: TestResultOutcome;
+  conclusionSummary: string;
+
+  // Section 7: Discussion & Recommendations
+  nonConformances: string[];
+  failures: string[];
+  designChangeRecommendations: string[];
+  discussionNotes: string;
+
+  // Linked entities
+  linkedNCRs: string[];
+  linkedCAPAs: string[];
+  linkedChangeControls: string[];
+  linkedRiskAssessments: string[];
+  linkedDocuments: string[];
+
+  // ISO & regulatory
+  isoReferences: ISOMapping[];
+  auditTrail: AuditEntry[];
+
+  // Timestamps
+  createdAt: Date;
+  updatedAt: Date;
+  submittedAt?: Date;
+  approvedAt?: Date;
+  approvedBy?: string;
+}
+
+export interface DVPREntry {
+  id: string;
+  requirementId: string;
+  requirementDescription: string;
+  testMethodId: string;
+  testMethodDescription: string;
+  responsibleEngineer: string;
+  targetDate: Date;
+  completedDate?: Date;
+  sampleSize: number;
+  outcome: TestResultOutcome;
+  reportReference: string;
+  notes?: string;
 }

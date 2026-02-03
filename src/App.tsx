@@ -18,6 +18,7 @@ const ChangeControlView = React.lazy(() => import('./components/views/ChangeCont
 const DocumentsView = React.lazy(() => import('./components/views/DocumentsView'));
 const AdminView = React.lazy(() => import('./components/views/AdminView'));
 const AIAgentsView = React.lazy(() => import('./components/views/AIAgentsView'));
+const ValidationView = React.lazy(() => import('./components/views/ValidationView'));
 import { EnhancedLoginView } from './components/views/EnhancedLoginView';
 
 function App() {
@@ -65,6 +66,8 @@ function App() {
         return <AuditView />;
       case 'settings':
         return <SettingsView />;
+      case 'validation':
+        return <ValidationView />;
       default:
         return <Dashboard />;
     }

@@ -20,10 +20,11 @@ import {
   UserCog,
   LogOut,
   User,
+  FlaskConical,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin';
+type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation';
 
 interface NavItem {
   id: ViewType;
@@ -34,12 +35,13 @@ interface NavItem {
 }
 
 export default function Sidebar() {
-  const { sidebarOpen, setSidebarOpen, activeView, setActiveView, getCAPAStats, getNCRStats, getUnacknowledgedAlerts } = useAppStore();
+  const { sidebarOpen, setSidebarOpen, activeView, setActiveView, getCAPAStats, getNCRStats, getUnacknowledgedAlerts, getValidationStats } = useAppStore();
   const { currentUser, logout } = useAuthStore();
 
   const capaStats = getCAPAStats();
   const ncrStats = getNCRStats();
   const alertCount = getUnacknowledgedAlerts().length;
+  const validationStats = getValidationStats();
 
   const allNavItems: NavItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, category: 'core' },
@@ -49,6 +51,7 @@ export default function Sidebar() {
     { id: 'ncr', label: 'NCR', icon: FileWarning, badge: ncrStats.open > 0 ? ncrStats.open : undefined, category: 'core' },
     { id: 'vigilance', label: 'Vigilance', icon: Bell, category: 'pms' },
     { id: 'lifecycle', label: 'Lifecycle', icon: GitBranch, category: 'core' },
+    { id: 'validation', label: 'Validation', icon: FlaskConical, badge: validationStats.inProgress > 0 ? validationStats.inProgress : undefined, category: 'core' },
     { id: 'aiagents', label: 'AI Agents', icon: Bot, category: 'pms' },
     { id: 'changecontrol', label: 'Change Control', icon: GitCommit, category: 'support' },
     { id: 'suppliers', label: 'Suppliers', icon: Truck, category: 'support' },
