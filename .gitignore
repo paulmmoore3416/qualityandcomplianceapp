@@ -74,6 +74,7 @@ oauth-secrets.json
 *.sqlite3
 data/
 user-data/
+server/data/
 
 # Backups
 *.backup

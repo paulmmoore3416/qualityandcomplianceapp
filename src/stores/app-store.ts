@@ -577,10 +577,48 @@ export const useAppStore = create<AppState>()(
     };
   },
 
-  // Data Persistence - now handled by Zustand persist middleware
+  // Data Persistence - syncs with backend API and falls back to localStorage/Electron
   loadData: async () => {
-    // With persist middleware, data is auto-loaded from localStorage
-    // This method now only handles Electron API for desktop app
+    // Try loading from backend API first
+    try {
+      const api = (await import('../services/api')).default;
+      if (api.getToken()) {
+        const modules = ['metrics', 'risks', 'capas', 'ncrs', 'alerts', 'lifecycle', 'lots',
+          'validationReports', 'suppliers', 'training', 'changeControls', 'complaints', 'documents', 'moduleLinks'];
+
+        const results = await Promise.allSettled(
+          modules.map(m => api.getModule(m, 1, 1000))
+        );
+
+        const stateUpdate: Partial<AppState> = {};
+        const moduleToKey: Record<string, keyof AppState> = {
+          metrics: 'metricValues', risks: 'riskAssessments', capas: 'capas',
+          ncrs: 'ncrs', alerts: 'alerts', lifecycle: 'lifecycleRecords',
+          lots: 'lots', validationReports: 'validationReports', suppliers: 'suppliers',
+          training: 'trainingRecords', changeControls: 'changeControls',
+          complaints: 'complaints', documents: 'documents', moduleLinks: 'moduleLinks',
+        };
+
+        results.forEach((result, idx) => {
+          if (result.status === 'fulfilled' && result.value.items.length > 0) {
+            const key = moduleToKey[modules[idx]];
+            if (key) {
+              (stateUpdate as Record<string, unknown>)[key] = result.value.items;
+            }
+          }
+        });
+
+        if (Object.keys(stateUpdate).length > 0) {
+          set(stateUpdate as Partial<AppState>);
+          console.log('Data loaded from backend API');
+          return;
+        }
+      }
+    } catch (error) {
+      console.warn('Backend API not available, using local data:', error);
+    }
+
+    // Fallback: Electron API
     if (window.electronAPI) {
       try {
         const result = await window.electronAPI.loadData('app-state');
@@ -610,8 +648,37 @@ export const useAppStore = create<AppState>()(
   },
 
   saveData: async () => {
-    // With persist middleware, data is auto-saved
-    // This method now only handles Electron API sync
+    // Try syncing to backend API
+    try {
+      const api = (await import('../services/api')).default;
+      if (api.getToken()) {
+        const state = get();
+        const syncMap: [string, unknown[]][] = [
+          ['metrics', state.metricValues],
+          ['risks', state.riskAssessments],
+          ['capas', state.capas],
+          ['ncrs', state.ncrs],
+          ['suppliers', state.suppliers],
+          ['training', state.trainingRecords],
+          ['changeControls', state.changeControls],
+          ['complaints', state.complaints],
+          ['documents', state.documents],
+        ];
+
+        // Only sync non-empty arrays to avoid overwriting
+        for (const [module, items] of syncMap) {
+          if (Array.isArray(items) && items.length > 0) {
+            api.bulkSync(module, items as Record<string, unknown>[]).catch(err => {
+              console.warn(`Failed to sync ${module}:`, err);
+            });
+          }
+        }
+      }
+    } catch (error) {
+      console.warn('Backend sync failed:', error);
+    }
+
+    // Also save to Electron if available
     if (window.electronAPI) {
       const state = get();
       const dataToSave = {

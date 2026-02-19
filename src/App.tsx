@@ -31,11 +31,11 @@ initializeKeyboardShortcuts();
 
 function App() {
   const { activeView, loadData } = useAppStore();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, restoreSession } = useAuthStore();
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    restoreSession().then(() => loadData());
+  }, [loadData, restoreSession]);
 
   // Show login screen if not authenticated
   if (!isAuthenticated) {

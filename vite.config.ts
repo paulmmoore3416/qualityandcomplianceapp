@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), ...(process.env.ANALYZE ? [visualizer({ open: true, filename: 'bundle-analysis.html' })] : [])],
-  base: '/qualityandcomplianceapp/',
+  base: mode === 'production' ? '/qualityandcomplianceapp/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -15,6 +15,16 @@ export default defineConfig({
       '@types': path.resolve(__dirname, './src/types'),
       '@stores': path.resolve(__dirname, './src/stores'),
       '@data': path.resolve(__dirname, './src/data'),
+      '@services': path.resolve(__dirname, './src/services'),
+    },
+  },
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
     },
   },
   build: {
@@ -35,4 +45,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));
