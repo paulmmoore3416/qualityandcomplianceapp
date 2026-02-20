@@ -1,495 +1,348 @@
 <div align="center">
 
-# 🏥 MedTech Compliance Suite
+<img src="public/logo.png" alt="MedTech Compliance Suite" width="200" />
 
-### Enterprise-Grade Quality Management System for Medical Device Manufacturing
+# MedTech Compliance Suite
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![ISO 13485](https://img.shields.io/badge/ISO-13485:2016-blue.svg)](https://www.iso.org/standard/59752.html)
-[![FDA 21 CFR Part 820](https://img.shields.io/badge/FDA-21%20CFR%20Part%20820-red.svg)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?CFRPart=820)
-[![ISO 14971](https://img.shields.io/badge/ISO-14971-blue.svg)](https://www.iso.org/standard/72704.html)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18.2-blue?logo=react)](https://reactjs.org/)
-[![Electron](https://img.shields.io/badge/Electron-40.0-blue?logo=electron)](https://www.electronjs.org/)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+### Enterprise-Grade Quality Management System for Medical Device Manufacturers
 
-[Features](#-key-features) • [Demo](#-live-demo) • [Installation](#-installation) • [Documentation](#-documentation) • [Contributing](#-contributing)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![ISO 13485](https://img.shields.io/badge/ISO-13485:2016-0066CC.svg)](https://www.iso.org/standard/59752.html)
+[![ISO 14971](https://img.shields.io/badge/ISO-14971:2019-0066CC.svg)](https://www.iso.org/standard/72704.html)
+[![FDA 21 CFR 820](https://img.shields.io/badge/FDA-21%20CFR%20Part%20820-CC0000.svg)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?CFRPart=820)
+[![EU MDR](https://img.shields.io/badge/EU%20MDR-2017/745-003399.svg)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32017R0745)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.2-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+
+[Features](#-key-features) • [Quick Start](#-quick-start) • [Download](#-download--install) • [Documentation](#-documentation) • [API Reference](#-api-reference) • [Contributing](#-contributing)
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## Overview
 
-- [Overview](#-overview)
-- [Key Features](#-key-features)
-- [Technology Stack](#-technology-stack)
-- [Screenshots](#-screenshots)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Architecture](#-architecture)
-- [Compliance Standards](#-compliance-standards)
-- [Resources](#-resources)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
-
----
-
-## 🎯 Overview
-
-**MedTech Compliance Suite** is a comprehensive, AI-powered quality management system (QMS) specifically designed for medical device manufacturers. Built from the ground up with regulatory compliance at its core, this platform automates quality processes, ensures data integrity, and provides real-time compliance monitoring across the entire product lifecycle.
+**MedTech Compliance Suite** is a full-stack, AI-assisted Quality Management System built specifically for medical device manufacturers. It automates quality workflows, enforces data integrity, and provides real-time regulatory compliance monitoring across the complete product lifecycle — from design control through post-market surveillance.
 
 ### Why MedTech Compliance Suite?
 
-- ✅ **Regulatory Compliance**: Pre-configured for ISO 13485, ISO 14971, FDA 21 CFR Part 820, and EU MDR
-- 🤖 **AI-Powered**: Intelligent agents for risk prediction, vigilance monitoring, and audit readiness
-- 🔒 **21 CFR Part 11 Compliant**: Electronic signatures, audit trails, and ALCOA+ data integrity
-- 📊 **Real-Time Analytics**: Live dashboards with predictive quality metrics
-- 🏭 **End-to-End Coverage**: From design control to post-market surveillance
-- 🚀 **Modern Architecture**: Built with TypeScript, React, and Electron for desktop deployment
+| Benefit | Detail |
+|---------|--------|
+| **Pre-configured regulatory frameworks** | ISO 13485, ISO 14971, FDA 21 CFR Part 820 & 11, EU MDR 2017/745 — ready on day one |
+| **Full-stack — not just a UI** | React frontend + Express/SQLite backend with JWT auth, persistent audit trail, and REST API |
+| **AI-powered intelligence** | Local LLM agents (Ollama) for risk prediction, complaint analysis, and audit-readiness queries |
+| **21 CFR Part 11 compliant** | Electronic signatures, immutable audit logs, ALCOA+ data integrity |
+| **Open-source & self-hosted** | Full control over your data — no SaaS lock-in, no telemetry |
+| **Production-ready security** | bcrypt passwords, rate limiting, CORS, Helmet, account lockout |
 
 ### Business Impact
 
 | Metric | Improvement |
 |--------|-------------|
-| Audit Preparation Time | **80% reduction** |
-| Quality Process Efficiency | **65% increase** |
-| Regulatory Compliance Rate | **100% maintained** |
-| CAPA Closure Time | **45% faster** |
-| Document Retrieval Time | **90% faster** |
-| Risk Identification Accuracy | **95%+ with AI** |
+| Audit preparation time | **80% reduction** |
+| Quality process efficiency | **65% increase** |
+| CAPA closure time | **45% faster** |
+| Document retrieval time | **90% faster** |
+| Risk identification accuracy | **95%+ with AI** |
 
 ---
 
-## ✨ Key Features
+## Key Features
 
-### 🎯 Core Quality Management
+### Core Quality Modules (19 Views)
 
-<table>
-<tr>
-<td width="50%">
+| Module | Description |
+|--------|-------------|
+| **Dashboard** | Executive KPI overview with real-time alerts and trend charts |
+| **Metrics Management** | 30+ ISO-mapped KPIs with automated threshold alerting |
+| **Risk Matrix (ISO 14971)** | Interactive 5×5 severity/probability matrix with mitigation tracking |
+| **CAPA Management** | Corrective & preventive action workflows with root cause analysis |
+| **NCR Tracking** | Non-conformance reports with lot traceability and disposition |
+| **Validation Reports** | EVT/DVT/PVT/DVP&R documentation with requirement traceability |
+| **Change Control** | 21 CFR Part 11 change request workflows with impact assessment |
+| **Lifecycle Management** | Design → Verification → Validation → Production → Post-Market |
+| **Document Control (eDMS)** | Controlled documents with version history and approval workflows |
+| **Supplier Management** | Supplier audits, certifications, scorecards, and SCAPA tracking |
+| **Training & Competency** | Curriculum management, certification tracking, compliance matrix |
+| **Vigilance / Complaints** | Post-market complaint tracking and adverse event reporting |
+| **Field Safety Actions** | Recall management, safety notices, regulatory notifications |
+| **Audit Trail** | Immutable, timestamped audit log with ISO clause references |
+| **Analytics Dashboard** | Business intelligence with trend analysis and predictive metrics |
+| **AI Agents** | Local LLM agents for vigilance monitoring, risk prediction, RAG queries |
+| **Admin Panel** | User management, role-based permissions, security settings |
+| **Settings** | Preferences, data import/export, theme, keyboard shortcuts |
 
-#### 📊 Metrics Management
-- Real-time KPI tracking
-- ISO-mapped quality metrics
-- Automated threshold alerting
-- Trend analysis & predictions
-- Custom metric builder
+### Backend API (Production-Ready)
 
-</td>
-<td width="50%">
+- **REST API** — Full CRUD for all 14 compliance modules
+- **JWT Authentication** — 8-hour tokens, account lockout, session tracking
+- **SQLite Database** — WAL mode, indexed, auto-migrated on startup
+- **Persistent Audit Trail** — Every action logged to database with user + IP
+- **Data Export** — JSON and CSV for all modules and the audit trail
+- **Health Monitoring** — `/api/health` and `/api/health/detailed` endpoints
+- **Security** — Helmet, CORS whitelist, rate limiting (500/15 min API, 20/15 min auth)
+- **Input Validation** — Server-side validation on all endpoints
 
-#### ⚠️ Risk Management (ISO 14971)
-- Comprehensive risk assessments
-- Severity × Probability matrices
-- Automated mitigation tracking
-- Post-market surveillance integration
-- Real-time risk dashboards
-
-</td>
-</tr>
-<tr>
-<td>
-
-#### 🔄 CAPA Management
-- Corrective & preventive actions
-- Root cause analysis tools
-- Workflow automation
-- Effectiveness verification
-- Deadline tracking
-
-</td>
-<td>
-
-#### 📋 Non-Conformance (NCR)
-- Multi-type NCR tracking
-- Disposition management
-- CAPA linkage
-- Trend analytics
-- Lot/batch traceability
-
-</td>
-</tr>
-</table>
-
-### 🏥 Post-Market Surveillance
-
-- **Complaint Management**: Multi-source tracking, severity classification, patient safety flags
-- **Adverse Event Reporting**: MDR/MAUDE integration, automated regulatory submissions
-- **Field Safety Actions**: Recall management, safety notices, customer notifications
-- **Vigilance Dashboard**: Real-time complaint trends, pending reports, investigation metrics
-
-### 🔐 Enterprise Features
-
-| Feature | Description |
-|---------|-------------|
-| **Electronic Document Management (eDMS)** | Version control, digital signatures, ISO-compliant workflows |
-| **Change Control (21 CFR Part 11)** | Impact assessments, multi-level approvals, validation triggers |
-| **Supplier Quality Management** | Supplier audits, certifications, performance scorecards |
-| **Training & Competency** | Automated curriculum, certification tracking, compliance monitoring |
-| **Audit Trail** | Immutable logs, ALCOA+ compliance, full traceability |
-
-### 🤖 AI Agent Infrastructure
-
-Our proprietary AI agents run locally for **air-gapped security** while providing enterprise intelligence:
+### AI Agent Infrastructure
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Vigilance Watchman Agent                               │
-│  • Automated complaint ingestion from emails/PDFs       │
-│  • Hazard extraction & risk linkage                     │
-│  • Auto-generates change controls for threshold breaches│
-│  • 95%+ accuracy with hallucination detection           │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│  Vigilance Watchman Agent                                │
+│  • Automated complaint ingestion from emails/PDFs        │
+│  • Hazard extraction and risk linkage                    │
+│  • Auto-generates change controls for threshold breaches │
+└──────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────┐
-│  Risk Predictor Agent                                   │
-│  • Predictive quality escape detection                  │
-│  • Compliance drift monitoring                          │
-│  • Performance decline forecasting                      │
-│  • Proactive mitigation recommendations                 │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│  Risk Predictor Agent                                    │
+│  • Predictive quality escape detection                   │
+│  • Compliance drift monitoring                           │
+│  • Proactive mitigation recommendations                  │
+└──────────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────────┐
-│  Audit-Ready RAG Agent                                  │
-│  • Natural language query over compliance documents     │
-│  • ISO clause mapping with confidence scores            │
-│  • Instant audit evidence retrieval                     │
-│  • Contextual regulatory guidance                       │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│  Audit-Ready RAG Agent                                   │
+│  • Natural language queries over compliance documents    │
+│  • ISO clause mapping with confidence scores             │
+│  • Instant audit evidence retrieval                      │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛠️ Technology Stack
-
-### Frontend
-- **React 18.2** - Modern UI framework
-- **TypeScript 5.3** - Type-safe development
-- **Tailwind CSS 3.4** - Utility-first styling
-- **Recharts 2.12** - Data visualization
-- **Lucide React** - Icon library
-- **Zustand 4.5** - State management
-
-### Backend & Desktop
-- **Electron 40** - Cross-platform desktop app
-- **Node.js** - Runtime environment
-- **Ollama Integration** - Local LLM deployment
-- **SQLite** (planned) - Embedded database
-
-### DevOps & Testing
-- **Vite 7.3** - Build tool & dev server
-- **Vitest 4.0** - Unit testing
-- **ESLint** - Code quality
-- **TypeScript Compiler** - Type checking
-- **Electron Builder** - App packaging
-
-### Security & Compliance
-- **bcrypt** - Password hashing
-- **Electronic Signatures** - 21 CFR Part 11 compliant
-- **Audit Logging** - Immutable event trails
-- **Role-Based Access Control** - Granular permissions
-- **Session Management** - Secure authentication
-
----
-
-## 📸 Screenshots
-
-### Dashboard
-> Real-time compliance overview with key quality metrics, alerts, and regulatory status
-
-### Risk Matrix
-> Interactive ISO 14971 risk assessment interface with heat mapping
-
-### CAPA Workflow
-> Comprehensive corrective and preventive action management
-
-### Vigilance Monitoring
-> Post-market surveillance dashboard for complaint tracking and adverse events
-
-### AI Agents
-> Local LLM-powered intelligent agents for automated compliance tasks
-
-*Screenshots coming soon - build the application to see the interface!*
-
----
-
-## 🚀 Installation
+## Quick Start
 
 ### Prerequisites
 
-- **Node.js 18+** ([Download](https://nodejs.org/))
-- **npm 9+** or **yarn 1.22+**
-- **Git** ([Download](https://git-scm.com/))
-- **Ollama** (optional, for AI features) ([Download](https://ollama.ai/))
+- **Node.js 18+** — [nodejs.org](https://nodejs.org/)
+- **npm 9+** — included with Node.js
+- **Ollama** *(optional — for AI features)* — [ollama.ai](https://ollama.ai/)
 
-### Quick Start
+### Run in 3 steps
 
 ```bash
-# Clone the repository
+# 1. Clone
 git clone https://github.com/paulmmoore3416/qualityandcomplianceapp.git
 cd qualityandcomplianceapp
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Start development server
+# 3. Configure environment and start
+cp .env.example .env
+# Edit .env to set JWT_SECRET and SEED_* passwords
 npm run dev
 ```
 
-The application will open at `http://localhost:5173`
+| URL | Description |
+|-----|-------------|
+| `http://localhost:5173` | React frontend |
+| `http://localhost:3001` | Express API server |
+| `http://localhost:3001/api/health` | Health check |
 
-### Build for Production
+> **First run:** The database is created at `server/data/compliance.db` and seeded with accounts whose passwords are shown in the console startup banner (derived from your `JWT_SECRET`). Set `SEED_*` variables in `.env` for explicit, shareable passwords.
+
+---
+
+## Download & Install
+
+### Option 1 — Clone & Run (Recommended)
 
 ```bash
-# Build web version
-npm run build
+git clone https://github.com/paulmmoore3416/qualityandcomplianceapp.git
+cd qualityandcomplianceapp
+npm install
+cp .env.example .env   # configure your secrets
+npm run dev
+```
 
-# Build Electron app
+### Option 2 — Download ZIP
+
+**[⬇ Download Latest ZIP](https://github.com/paulmmoore3416/qualityandcomplianceapp/archive/refs/heads/main.zip)**
+
+Extract, `cd` into the folder, then follow steps 2–3 above.
+
+### Option 3 — Electron Desktop App
+
+```bash
+# Build a native desktop app (Windows / macOS / Linux)
+npm install
 npm run electron:build
+# Installer is written to ./release/
 ```
 
-### Electron Development
+### Scripts
 
-```bash
-# Run in Electron with hot reload
-npm run electron:dev
-```
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start both API server and frontend (hot reload) |
+| `npm run server` | Start backend API only |
+| `npm run dev:frontend` | Start Vite frontend only |
+| `npm run build` | Production build → `dist/` |
+| `npm run start` | Run production server (after build) |
+| `npm run electron:build` | Package desktop app |
+| `npm test` | Run test suite |
+| `npm run typecheck` | TypeScript type check |
 
 ---
 
-## 💻 Usage
+## Architecture
 
-### Login
+```
+┌────────────────────────────────────────────────────────────┐
+│  React 18 Frontend  (Vite · TypeScript · Tailwind · Zustand)│
+│  19 compliance views · Command palette · Dark mode          │
+└───────────────────────────┬────────────────────────────────┘
+                            │  /api  (Vite proxy → port 3001)
+┌───────────────────────────▼────────────────────────────────┐
+│  Express.js Backend  (Node.js · JWT · bcrypt · Helmet)      │
+│  REST API · Rate limiting · CORS · Session management       │
+└───────────────────────────┬────────────────────────────────┘
+                            │
+┌───────────────────────────▼────────────────────────────────┐
+│  SQLite Database  (better-sqlite3 · WAL mode)               │
+│  Users · Sessions · Audit trail · Compliance data           │
+└────────────────────────────────────────────────────────────┘
+```
 
-The application requires authentication. For development and testing, configure demo credentials in a local `.env` file. See `INSTALLATION.md` for setup instructions.
+### API Endpoints
 
-### SSO Authentication
-
-The application supports enterprise SSO via:
-- 🔵 **Google** - OAuth 2.0 integration
-- 🐙 **GitHub** - OAuth 2.0 integration
-- 🟦 **Microsoft** - Azure AD / OAuth 2.0 integration
-
-*Note: SSO is currently in demo mode. Production deployment requires OAuth app configuration.*
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/auth/login` | Authenticate, receive JWT |
+| `POST` | `/api/auth/logout` | Invalidate session |
+| `GET` | `/api/auth/me` | Current user profile |
+| `GET/POST` | `/api/compliance/:module` | List / create records |
+| `GET/PUT/DELETE` | `/api/compliance/:module/:id` | Read / update / delete |
+| `POST` | `/api/compliance/bulk/:module` | Bulk import / sync |
+| `GET` | `/api/audit` | Audit trail with filters |
+| `GET` | `/api/audit/stats` | Audit statistics |
+| `GET` | `/api/export/data` | Export as JSON or CSV |
+| `GET` | `/api/export/audit` | Export audit trail |
+| `GET` | `/api/export/report` | Compliance summary report |
+| `GET` | `/api/health` | Public health check |
+| `GET` | `/api/health/detailed` | System metrics and DB stats |
 
 ---
 
-## 🏗️ Architecture
-
-```
-┌──────────────────────────────────────────────────────────┐
-│                    Presentation Layer                     │
-│  ┌────────────┐  ┌────────────┐  ┌───────────────────┐  │
-│  │  React UI  │  │  Zustand   │  │  React Router     │  │
-│  │ Components │  │   Stores   │  │   Navigation      │  │
-│  └────────────┘  └────────────┘  └───────────────────┘  │
-└──────────────────────────────────────────────────────────┘
-                            ↓
-┌──────────────────────────────────────────────────────────┐
-│                    Business Logic Layer                   │
-│  ┌────────────────┐  ┌───────────────┐  ┌────────────┐  │
-│  │  Compliance    │  │  Metrics      │  │  Risk      │  │
-│  │  Engine        │  │  Calculator   │  │  Assessor  │  │
-│  └────────────────┘  └───────────────┘  └────────────┘  │
-└──────────────────────────────────────────────────────────┘
-                            ↓
-┌──────────────────────────────────────────────────────────┐
-│                    AI Agent Layer                         │
-│  ┌─────────────┐  ┌──────────────┐  ┌────────────────┐  │
-│  │  Vigilance  │  │  Risk        │  │  Audit RAG     │  │
-│  │  Watchman   │  │  Predictor   │  │  Agent         │  │
-│  └─────────────┘  └──────────────┘  └────────────────┘  │
-└──────────────────────────────────────────────────────────┘
-                            ↓
-┌──────────────────────────────────────────────────────────┐
-│                    Electron Main Process                  │
-│  ┌────────────────┐  ┌───────────────┐  ┌────────────┐  │
-│  │  IPC Handlers  │  │  File System  │  │  Ollama    │  │
-│  │                │  │  Operations   │  │  CLI       │  │
-│  └────────────────┘  └───────────────┘  └────────────┘  │
-└──────────────────────────────────────────────────────────┘
-```
-
-For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md)
-
----
-
-## 📜 Compliance Standards
-
-This application is designed to support compliance with:
+## Compliance Standards Supported
 
 ### ISO Standards
-- **ISO 13485:2016** - Medical devices — Quality management systems
-- **ISO 14971:2019** - Medical devices — Application of risk management
-- **ISO 10993** - Biological evaluation of medical devices
-- **ISO 9001:2015** - Quality management systems
-- **IEC 62304** - Medical device software lifecycle processes
-- **IEC 60601** - Medical electrical equipment safety
+- **ISO 13485:2016** — Medical devices quality management systems
+- **ISO 14971:2019** — Risk management for medical devices
+- **ISO 10993** — Biological evaluation
+- **IEC 62304** — Medical device software lifecycle
+- **IEC 60601** — Medical electrical equipment safety
+- **IEC 62366** — Usability engineering
 
 ### FDA Regulations
-- **21 CFR Part 820** - Quality System Regulation (QSR)
-- **21 CFR Part 11** - Electronic records & signatures
-- **21 CFR Part 803** - Medical Device Reporting (MDR)
-- **21 CFR Part 806** - Medical Device Recalls
+- **21 CFR Part 820** — Quality System Regulation
+- **21 CFR Part 11** — Electronic records and signatures
+- **21 CFR Part 803** — Medical Device Reporting
+- **21 CFR Part 806** — Recalls and corrections
 
-### International Regulations
-- **EU MDR 2017/745** - Medical Device Regulation
-- **EU IVDR 2017/746** - In Vitro Diagnostic Regulation
-- **Health Canada CMDCAS** - Canadian Medical Devices Conformity Assessment System
-- **TGA Therapeutic Goods Act** - Australia
-- **PMDA** - Pharmaceuticals and Medical Devices Agency (Japan)
-
----
-
-## 📚 Resources
-
-### Downloadable Compliance Documents
-
-All resources are located in the [`/resources`](./resources) directory:
-
-#### ISO Standards (Informational Summaries)
-- [ISO 13485:2016 Summary](./resources/standards/ISO-13485-2016-Summary.pdf)
-- [ISO 14971:2019 Summary](./resources/standards/ISO-14971-2019-Summary.pdf)
-- [ISO 10993 Biocompatibility Guide](./resources/standards/ISO-10993-Guide.pdf)
-
-#### FDA Regulations (Public Domain)
-- [21 CFR Part 820 - Quality System Regulation](./resources/fda/21-CFR-Part-820.pdf)
-- [21 CFR Part 11 - Electronic Records](./resources/fda/21-CFR-Part-11.pdf)
-- [21 CFR Part 803 - MDR Requirements](./resources/fda/21-CFR-Part-803.pdf)
-- [21 CFR Part 806 - Recall Requirements](./resources/fda/21-CFR-Part-806.pdf)
-
-#### EU Regulations (Public Domain)
-- [EU MDR 2017/745 Full Text](./resources/eu/EU-MDR-2017-745.pdf)
-- [MDCG Guidance Documents Collection](./resources/eu/MDCG-Guidance-Collection.pdf)
-
-#### Templates & Forms
-- [Risk Assessment Template](./resources/templates/Risk-Assessment-Template.xlsx)
-- [CAPA Form Template](./resources/templates/CAPA-Form-Template.docx)
-- [NCR Form Template](./resources/templates/NCR-Form-Template.docx)
-- [Audit Checklist - ISO 13485](./resources/templates/Audit-Checklist-ISO-13485.xlsx)
-- [Document Change Control Form](./resources/templates/Change-Control-Form.docx)
-- [Supplier Audit Checklist](./resources/templates/Supplier-Audit-Checklist.xlsx)
-- [Training Record Template](./resources/templates/Training-Record-Template.xlsx)
-
-### Additional Documentation
-
-- [Installation Guide](./INSTALLATION.md) - Detailed setup instructions
-- [User Guide](./USER_GUIDE.md) - Complete user documentation
-- [Architecture Documentation](./ARCHITECTURE.md) - Technical architecture details
-- [Contributing Guidelines](./CONTRIBUTING.md) - How to contribute
-- [Security Policy](./SECURITY.md) - Security and vulnerability reporting
-- [API Reference](./API_REFERENCE.md) - API documentation (coming soon)
+### International
+- **EU MDR 2017/745** — EU Medical Device Regulation
+- **EU IVDR 2017/746** — In Vitro Diagnostic Regulation
+- **Health Canada CMDCAS**
+- **TGA** (Australia)
+- **PMDA** (Japan)
 
 ---
 
-## 🤝 Contributing
+## Documentation
 
-We welcome contributions from the community! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
+| Document | Description |
+|----------|-------------|
+| [INSTALLATION.md](INSTALLATION.md) | Detailed setup and configuration |
+| [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to contribute |
+| [SOPS.md](SOPS.md) | Standard operating procedures |
+| [.env.example](.env.example) | All environment variable options |
+| [resources/](resources/) | Compliance templates and regulatory documents |
 
-### How to Contribute
+### Downloadable Resources
 
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/AmazingFeature`)
-3. **Commit your changes** (`git commit -m 'Add some AmazingFeature'`)
-4. **Push to the branch** (`git push origin feature/AmazingFeature`)
-5. **Open a Pull Request**
+All resources are in the [`resources/`](resources/) directory and downloadable directly from GitHub:
 
-Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct and development process.
+- **Templates** — Risk assessment, CAPA, NCR, audit checklist, change control, supplier audit, training record
+- **FDA Regulations** — 21 CFR Part 820, Part 11, Part 803, Part 806 (public domain)
+- **EU Regulations** — EU MDR 2017/745, MDCG guidance documents
+- **ISO Summaries** — ISO 13485, ISO 14971, ISO 10993 informational guides
 
-### Development Setup
+---
+
+## Security
+
+- No hardcoded credentials in source code — all credentials configured via `.env`
+- Passwords hashed with bcrypt (cost factor 10)
+- JWT tokens with configurable expiry
+- Account lockout after 5 failed login attempts (15-minute lockout)
+- Rate limiting on all API endpoints
+- Helmet.js security headers
+- CORS restricted to configured origins
+- All actions logged to immutable audit trail with user, IP, and timestamp
+
+See [SECURITY.md](SECURITY.md) for the full security policy and vulnerability reporting process.
+
+---
+
+## Contributing
+
+Contributions are welcome — bug fixes, new features, documentation, and compliance content.
 
 ```bash
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Run tests with coverage
-npm run test:coverage
-
-# Type check
-npm run typecheck
-
-# Lint code
-npm run lint
+# Fork → create branch → commit → push → PR
+git checkout -b feature/my-feature
+# make changes
+git commit -m "Add: my feature"
+git push origin feature/my-feature
+# Open a pull request on GitHub
 ```
 
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
-
-### Commercial Use
-
-While this software is MIT licensed and free to use, **MedTech Compliance Solutions LLC** offers:
-- 🎯 **Enterprise Support** - Priority bug fixes and feature requests
-- 🏢 **Professional Services** - Implementation, training, and validation
-- 📋 **Compliance Consulting** - Regulatory guidance and audit support
-- 🔒 **Hosted Solutions** - Cloud deployment with SOC 2 compliance
-
-Contact us at [paulmmoore3416@gmail.com](mailto:paulmmoore3416@gmail.com) for enterprise licensing options.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 ---
 
-## 👥 Team
+## License
 
-### Founded by Quality Professionals
+**MIT License** — free for personal, commercial, and enterprise use. See [LICENSE](LICENSE).
+
+### Enterprise & Professional Services
+
+**MedTech Compliance Solutions LLC** offers:
+
+- **Enterprise Support** — Priority fixes, SLA-backed response
+- **Professional Services** — Implementation, training, IQ/OQ/PQ validation
+- **Compliance Consulting** — Regulatory strategy, audit preparation
+- **Hosted Solutions** — Managed cloud deployment with SOC 2 compliance
+
+Contact: [paulmmoore3416@gmail.com](mailto:paulmmoore3416@gmail.com)
+
+---
+
+## Team
 
 **MedTech Compliance Solutions LLC**
-- **Katie Emma** - CEO & Co-Founder (50% ownership)
-- **Paul Moore** - COO/CTO & Co-Founder (50% ownership)
 
-📍 **Location**: 5739 Potomac St, St. Louis, MO 63139
-🌐 **Website**: [www.medtechcomplianceLLc.org](http://www.medtechcomplianceLLc.org)
+| Name | Role |
+|------|------|
+| Katie Emma | CEO & Co-Founder |
+| Paul Moore | COO/CTO & Co-Founder |
 
-### Our Mission
-
-To empower medical device manufacturers with intelligent, automated compliance solutions that ensure patient safety, regulatory compliance, and operational excellence through cutting-edge AI-driven quality management systems.
-
----
-
-## 📞 Contact
-
-### General Inquiries
-- **Email**: [paulmmoore3416@gmail.com](mailto:paulmmoore3416@gmail.com)
-- **GitHub**: [@paulmmoore3416](https://github.com/paulmmoore3416)
-
-### Support
-- **Issue Tracker**: [GitHub Issues](https://github.com/paulmmoore3416/qualityandcomplianceapp/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/paulmmoore3416/qualityandcomplianceapp/discussions)
-
-### Enterprise & Sales
-For enterprise licensing, professional services, or partnership opportunities:
-- **Email**: [paulmmoore3416@gmail.com](mailto:paulmmoore3416@gmail.com)
-- **LinkedIn**: Connect with us for business inquiries
-
----
-
-## 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=paulmmoore3416/qualityandcomplianceapp&type=Date)](https://star-history.com/#paulmmoore3416/qualityandcomplianceapp&Date)
-
----
-
-## 🙏 Acknowledgments
-
-- **Regulatory Agencies**: FDA, ISO, European Commission for public domain resources
-- **Open Source Community**: All the amazing developers behind our tech stack
-- **Medical Device Industry**: QA professionals who provided invaluable feedback
-- **Early Adopters**: Thank you for testing and improving this platform
+Website: [www.medtechcomplianceLLc.org](http://www.medtechcomplianceLLc.org)
 
 ---
 
 <div align="center">
 
-### ⭐ If this project helps your organization, please consider giving it a star!
+<img src="public/logo.png" alt="MedTech Compliance Suite" width="100" />
 
-**Made with ❤️ for the Medical Device Industry**
+**Made for the Medical Device Industry**
 
-[🏠 Home](https://github.com/paulmmoore3416/qualityandcomplianceapp) • [📖 Docs](./INSTALLATION.md) • [🐛 Report Bug](https://github.com/paulmmoore3416/qualityandcomplianceapp/issues) • [✨ Request Feature](https://github.com/paulmmoore3416/qualityandcomplianceapp/issues)
+[Report a Bug](https://github.com/paulmmoore3416/qualityandcomplianceapp/issues) • [Request a Feature](https://github.com/paulmmoore3416/qualityandcomplianceapp/issues) • [Discussions](https://github.com/paulmmoore3416/qualityandcomplianceapp/discussions)
+
+⭐ If this project helps your organization, please star it on GitHub!
 
 </div>

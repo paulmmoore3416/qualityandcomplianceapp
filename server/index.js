@@ -102,6 +102,11 @@ app.use((req, res) => {
 
 // ─── Start Server ───────────────────────────────────────────────────
 const server = app.listen(PORT, () => {
+  const crypto = require('crypto');
+  const jwtSecret = process.env.JWT_SECRET || 'change-me-in-production';
+  const mkPass = (u) => process.env[`SEED_${u.toUpperCase()}_PASSWORD`]
+    || crypto.createHmac('sha256', jwtSecret).update(u === 'qa_manager' ? 'qa_manager' : u).digest('hex').slice(0, 16);
+
   console.log('');
   console.log('═══════════════════════════════════════════════════════');
   console.log('  MedTech Compliance Suite - Backend API Server');
@@ -109,12 +114,17 @@ const server = app.listen(PORT, () => {
   console.log(`  Environment : ${NODE_ENV}`);
   console.log(`  API Server  : http://localhost:${PORT}`);
   console.log(`  Health Check: http://localhost:${PORT}/api/health`);
-  console.log('');
-  console.log('  Default Credentials:');
-  console.log('    admin    / admin123  (Full admin access)');
-  console.log('    qa_manager / qa123   (QA Manager)');
-  console.log('    engineer / eng123    (Engineer)');
-  console.log('    demo     / demo123   (Demo user)');
+  if (NODE_ENV !== 'production') {
+    console.log('');
+    console.log('  Seeded Accounts (set SEED_* env vars to override):');
+    console.log(`    admin      / ${mkPass('admin')}`);
+    console.log(`    qa_manager / ${mkPass('qa_manager')}`);
+    console.log(`    engineer   / ${mkPass('engineer')}`);
+    console.log(`    demo       / ${mkPass('demo')}`);
+    console.log('');
+    console.log('  ⚠  These are derived from JWT_SECRET. Set SEED_*');
+    console.log('     env vars for predictable demo passwords.');
+  }
   console.log('═══════════════════════════════════════════════════════');
   console.log('');
 });

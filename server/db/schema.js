@@ -5,6 +5,15 @@ const { v4: uuidv4 } = require('uuid');
 
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', 'data', 'compliance.db');
 
+// Generate a deterministic but non-guessable default from JWT_SECRET + username.
+// This means if you run without SEED_* vars, each install gets unique passwords
+// tied to its JWT_SECRET. Never hard-codes passwords in source code.
+function generateSecureDefault(username) {
+  const secret = process.env.JWT_SECRET || 'change-me-in-production';
+  const crypto = require('crypto');
+  return crypto.createHmac('sha256', secret).update(username).digest('hex').slice(0, 16);
+}
+
 let db;
 
 function getDb() {
@@ -128,7 +137,7 @@ function seedDefaultUsers(db) {
       username: 'admin',
       email: 'admin@medtech.com',
       fullName: 'System Administrator',
-      password: 'admin123',
+      password: process.env.SEED_ADMIN_PASSWORD || generateSecureDefault('admin'),
       role: 'Admin',
       permissions: JSON.stringify([
         'view_dashboard', 'view_metrics', 'edit_metrics', 'view_risk', 'edit_risk',
@@ -149,7 +158,7 @@ function seedDefaultUsers(db) {
       username: 'qa_manager',
       email: 'qa.manager@medtech.com',
       fullName: 'Sarah Johnson',
-      password: 'qa123',
+      password: process.env.SEED_QA_PASSWORD || generateSecureDefault('qa_manager'),
       role: 'QA Manager',
       permissions: JSON.stringify([
         'view_dashboard', 'view_metrics', 'edit_metrics', 'view_risk', 'edit_risk',
@@ -169,7 +178,7 @@ function seedDefaultUsers(db) {
       username: 'engineer',
       email: 'engineer@medtech.com',
       fullName: 'Michael Chen',
-      password: 'eng123',
+      password: process.env.SEED_ENGINEER_PASSWORD || generateSecureDefault('engineer'),
       role: 'Engineer',
       permissions: JSON.stringify([
         'view_dashboard', 'view_metrics', 'view_risk', 'view_capa', 'edit_capa',
@@ -186,7 +195,7 @@ function seedDefaultUsers(db) {
       username: 'demo',
       email: 'demo@medtech.com',
       fullName: 'Demo User',
-      password: 'demo123',
+      password: process.env.SEED_DEMO_PASSWORD || generateSecureDefault('demo'),
       role: 'Demo',
       permissions: JSON.stringify([
         'view_dashboard', 'view_metrics', 'edit_metrics', 'view_risk', 'edit_risk',
@@ -215,7 +224,7 @@ function seedDefaultUsers(db) {
   });
 
   insertTransaction();
-  console.log('Default users seeded (admin/admin123, qa_manager/qa123, engineer/eng123, demo/demo123)');
+  console.log('Default users seeded. Check your .env file for SEED_* passwords, or see the startup banner.');
 }
 
 function closeDatabase() {

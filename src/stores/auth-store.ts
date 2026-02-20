@@ -226,18 +226,23 @@ if (typeof window !== 'undefined') {
   });
 }
 
-// Fallback mock login for when backend is unavailable
+// Fallback mock login for when backend is unavailable.
+// Passwords are NOT hardcoded here — configure SEED_* env vars on the backend,
+// or set VITE_MOCK_* env vars for local frontend-only development.
 async function tryMockLogin(username: string, password: string): Promise<{ user: User; session: Session } | null> {
-  const MOCK_USERS = [
-    { username: 'admin', password: 'admin123', role: 'Admin' as UserRole, fullName: 'System Administrator', email: 'admin@medtech.com', department: 'IT & Quality Systems', title: 'Quality Systems Administrator' },
-    { username: 'qa_manager', password: 'qa123', role: 'QA Manager' as UserRole, fullName: 'Sarah Johnson', email: 'qa.manager@medtech.com', department: 'Quality Assurance', title: 'QA Manager' },
-    { username: 'engineer', password: 'eng123', role: 'Engineer' as UserRole, fullName: 'Michael Chen', email: 'engineer@medtech.com', department: 'Engineering', title: 'Senior Design Engineer' },
-    { username: 'demo', password: 'demo123', role: 'Demo' as UserRole, fullName: 'Demo User', email: 'demo@medtech.com', department: 'Demonstration', title: 'Demo Account' },
+  const MOCK_USERS: { username: string; envKey: string; role: UserRole; fullName: string; email: string; department: string; title: string }[] = [
+    { username: 'admin', envKey: 'VITE_MOCK_ADMIN_PASSWORD', role: 'Admin', fullName: 'System Administrator', email: 'admin@medtech.com', department: 'IT & Quality Systems', title: 'Quality Systems Administrator' },
+    { username: 'qa_manager', envKey: 'VITE_MOCK_QA_PASSWORD', role: 'QA Manager', fullName: 'Sarah Johnson', email: 'qa.manager@medtech.com', department: 'Quality Assurance', title: 'QA Manager' },
+    { username: 'engineer', envKey: 'VITE_MOCK_ENGINEER_PASSWORD', role: 'Engineer', fullName: 'Michael Chen', email: 'engineer@medtech.com', department: 'Engineering', title: 'Senior Design Engineer' },
+    { username: 'demo', envKey: 'VITE_MOCK_DEMO_PASSWORD', role: 'Demo', fullName: 'Demo User', email: 'demo@medtech.com', department: 'Demonstration', title: 'Demo Account' },
   ];
 
   await new Promise((resolve) => setTimeout(resolve, 300));
 
-  const match = MOCK_USERS.find(u => u.username === username && u.password === password);
+  const match = MOCK_USERS.find(u => {
+    const expectedPassword = import.meta.env[u.envKey];
+    return u.username === username && expectedPassword && expectedPassword === password;
+  });
   if (!match) return null;
 
   const allPerms: Permission[] = [
