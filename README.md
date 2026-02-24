@@ -4,7 +4,7 @@
 
 # MedTech Compliance Suite
 
-### Enterprise-Grade Quality Management System for Medical Device Manufacturers
+### Enterprise Grade Quality Management System for Medical Device Manufacturers
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![ISO 13485](https://img.shields.io/badge/ISO-13485:2016-0066CC.svg)](https://www.iso.org/standard/59752.html)
@@ -23,18 +23,18 @@
 
 ## Overview
 
-**MedTech Compliance Suite** is a full-stack, AI-assisted Quality Management System built specifically for medical device manufacturers. It automates quality workflows, enforces data integrity, and provides real-time regulatory compliance monitoring across the complete product lifecycle — from design control through post-market surveillance.
+**MedTech Compliance Suite** is a full stack, AI assisted Quality Management System built specifically for medical device manufacturers. It automates quality workflows, enforces data integrity, and provides real time regulatory compliance monitoring across the complete product lifecycle; from design control through post-market surveillance.
 
 ### Why MedTech Compliance Suite?
 
 | Benefit | Detail |
 |---------|--------|
 | **Pre-configured regulatory frameworks** | ISO 13485, ISO 14971, FDA 21 CFR Part 820 & 11, EU MDR 2017/745 — ready on day one |
-| **Full-stack — not just a UI** | React frontend + Express/SQLite backend with JWT auth, persistent audit trail, and REST API |
-| **AI-powered intelligence** | Local LLM agents (Ollama) for risk prediction, complaint analysis, and audit-readiness queries |
+| **Full stack not just a UI** | React frontend + Express/SQLite backend with JWT auth, persistent audit trail, and REST API |
+| **AI powered intelligence** | Local LLM agents (Ollama) for risk prediction, complaint analysis, and audit readiness queries |
 | **21 CFR Part 11 compliant** | Electronic signatures, immutable audit logs, ALCOA+ data integrity |
-| **Open-source & self-hosted** | Full control over your data — no SaaS lock-in, no telemetry |
-| **Production-ready security** | bcrypt passwords, rate limiting, CORS, Helmet, account lockout |
+| **Open source & self-hosted** | Full control over your data — no SaaS lock-in, no telemetry |
+| **Production ready security** | bcrypt passwords, rate limiting, CORS, Helmet, account lockout |
 
 ### Business Impact
 
