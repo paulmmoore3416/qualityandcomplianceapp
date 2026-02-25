@@ -13,6 +13,7 @@ export type ISOStandard =
   | 'IEC 62366'
   | 'ISO 14155'
   | 'ISO 15223'
+  | 'ISO 17664'
   | 'ISO 20417'
   | 'FDA 21 CFR 820'
   | 'EU MDR 2017/745';

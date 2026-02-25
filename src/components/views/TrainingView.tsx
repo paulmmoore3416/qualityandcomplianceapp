@@ -11,6 +11,7 @@ import {
 import { cn, formatDate, daysUntil } from '../../lib/utils';
 import { TrainingRecord, TrainingStatus, TrainingMatrix } from '../../types';
 import TrainingRecordModal from '../modals/TrainingRecordModal';
+import AssignTrainingModal, { TrainingAssignment } from '../modals/AssignTrainingModal';
 
 // Sample data
 const sampleTrainingRecords: TrainingRecord[] = [
@@ -89,8 +90,27 @@ export default function TrainingView() {
   const [departmentFilter, setDepartmentFilter] = useState<string>('all');
   const [selectedRecord, setSelectedRecord] = useState<TrainingRecord | null>(null);
   const [showRecordModal, setShowRecordModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [trainingRecordList, setTrainingRecordList] = useState<TrainingRecord[]>(sampleTrainingRecords);
 
-  const trainingRecords = sampleTrainingRecords;
+  const handleAssignTraining = (assignment: TrainingAssignment) => {
+    const newRecord: TrainingRecord = {
+      id: assignment.id,
+      employeeId: assignment.employeeId,
+      employeeName: assignment.employeeName,
+      department: assignment.department,
+      role: assignment.role,
+      trainingId: assignment.trainingId,
+      trainingTitle: assignment.trainingTitle,
+      trainingType: assignment.trainingType as TrainingRecord['trainingType'],
+      requiredBy: assignment.requiredBy ? new Date(assignment.requiredBy) : new Date(),
+      status: 'Not Started',
+      passingScore: assignment.passingScore,
+    };
+    setTrainingRecordList((prev) => [...prev, newRecord]);
+  };
+
+  const trainingRecords = trainingRecordList;
   const departmentCompliance = sampleDepartmentCompliance;
 
   const filteredRecords = trainingRecords.filter((r) => {
@@ -144,7 +164,7 @@ export default function TrainingView() {
             Per ISO 13485:6.2 - Human Resources & Competence
           </p>
         </div>
-        <button className="btn-primary gap-2">
+        <button type="button" onClick={() => setShowAssignModal(true)} className="btn-primary gap-2">
           <Plus className="w-4 h-4" />
           Assign Training
         </button>
@@ -397,6 +417,14 @@ export default function TrainingView() {
         <TrainingRecordModal
           record={selectedRecord}
           onClose={handleCloseModal}
+        />
+      )}
+
+      {/* Assign Training Modal */}
+      {showAssignModal && (
+        <AssignTrainingModal
+          onClose={() => setShowAssignModal(false)}
+          onSave={handleAssignTraining}
         />
       )}
     </div>

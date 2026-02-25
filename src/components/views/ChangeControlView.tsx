@@ -9,10 +9,14 @@ import {
   FileText,
   Shield,
   Pen,
+  X,
+  User,
+  Lock,
 } from 'lucide-react';
 import { cn, formatDate } from '../../lib/utils';
 import { ChangeControl, ChangeType, ChangeStatus, ChangeClassification } from '../../types';
 import ChangeControlModal from '../modals/ChangeControlModal';
+import RiskReviewModal from '../modals/RiskReviewModal';
 
 // Sample data
 const sampleChangeControls: ChangeControl[] = [
@@ -147,11 +151,49 @@ const sampleChangeControls: ChangeControl[] = [
 
 export default function ChangeControlView() {
   const [showModal, setShowModal] = useState(false);
+  const [showRiskReviewModal, setShowRiskReviewModal] = useState(false);
+  const [showSignModal, setShowSignModal] = useState(false);
+  const [signingChange, setSigningChange] = useState<ChangeControl | null>(null);
+  const [signaturePassword, setSignaturePassword] = useState('');
+  const [signatureRole, setSignatureRole] = useState('Regulatory');
+  const [signatureDecision, setSignatureDecision] = useState<'Approved' | 'Rejected'>('Approved');
+  const [signatureComments, setSignatureComments] = useState('');
+  const [signatureError, setSignatureError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [typeFilter, setTypeFilter] = useState<ChangeType | 'all'>('all');
   const [statusFilter, setStatusFilter] = useState<ChangeStatus | 'all'>('all');
 
+  const handleSignApprove = (cc: ChangeControl) => {
+    setSigningChange(cc);
+    setSignaturePassword('');
+    setSignatureRole('Regulatory');
+    setSignatureDecision('Approved');
+    setSignatureComments('');
+    setSignatureError('');
+    setShowSignModal(true);
+  };
+
+  const handleSignSubmit = () => {
+    if (!signaturePassword) {
+      setSignatureError('Password is required to apply electronic signature.');
+      return;
+    }
+    // In a real app, verify password against authenticated user's credentials
+    alert(
+      `Electronic Signature Applied\n` +
+      `Change: ${signingChange?.referenceNumber}\n` +
+      `Decision: ${signatureDecision}\n` +
+      `Role: ${signatureRole}\n` +
+      `Per 21 CFR Part 11 — Signature recorded in audit trail`
+    );
+    setShowSignModal(false);
+    setSigningChange(null);
+  };
+
   const changeControls = sampleChangeControls;
+
+  // Get risk-triggered changes for the review modal
+  const riskTriggeredChanges = changeControls.filter((cc) => cc.triggeredByRiskBreach);
 
   const filteredChanges = changeControls.filter((cc) => {
     const matchesSearch =
@@ -219,7 +261,12 @@ export default function ChangeControlView() {
                 Per ISO 13485:4.1.4, immediate review and disposition required.
               </p>
             </div>
-            <button className="btn-danger btn-sm">Review Now</button>
+            <button 
+              onClick={() => setShowRiskReviewModal(true)} 
+              className="btn-danger btn-sm"
+            >
+              Review Now
+            </button>
           </div>
         </div>
       )}
@@ -301,6 +348,8 @@ export default function ChangeControlView() {
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value as ChangeType | 'all')}
           className="input w-auto"
+          title="Filter by change type"
+          aria-label="Filter by change type"
         >
           <option value="all">All Types</option>
           <option value="Design">Design</option>
@@ -420,7 +469,11 @@ export default function ChangeControlView() {
                   ))}
                 </div>
                 {cc.status === 'Pending Review' && (
-                  <button className="btn-primary btn-sm w-full mt-3 gap-1">
+                  <button
+                    type="button"
+                    onClick={() => handleSignApprove(cc)}
+                    className="btn-primary btn-sm w-full mt-3 gap-1"
+                  >
                     <Pen className="w-3 h-3" />
                     Sign & Approve
                   </button>
@@ -460,6 +513,192 @@ export default function ChangeControlView() {
 
       {/* Modal */}
       {showModal && <ChangeControlModal onClose={() => setShowModal(false)} />}
+
+      {/* Risk Review Modal */}
+      {showRiskReviewModal && (
+        <RiskReviewModal
+          onClose={() => setShowRiskReviewModal(false)}
+          riskTriggeredChanges={riskTriggeredChanges}
+        />
+      )}
+
+      {/* ─── Electronic Signature / Sign & Approve Modal ─── */}
+      {showSignModal && signingChange && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-lg">
+            <div className="flex items-center justify-between p-5 border-b">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                  <Pen className="w-4 h-4 text-primary-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">Electronic Signature</h3>
+                  <p className="text-xs text-gray-500">{signingChange.referenceNumber} — 21 CFR Part 11 Compliant</p>
+                </div>
+              </div>
+              <button type="button" aria-label="Close" onClick={() => setShowSignModal(false)} className="btn-ghost p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              {/* Change Summary */}
+              <div className="bg-surface-50 rounded-lg p-4">
+                <p className="text-sm font-medium text-gray-700 mb-1">Change Being Approved</p>
+                <p className="text-sm text-gray-900">{signingChange.title}</p>
+                <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                  <span className={cn('badge', signingChange.classification === 'Major' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700')}>
+                    {signingChange.classification}
+                  </span>
+                  <span>{signingChange.type}</span>
+                  <span>Requested by {signingChange.requestedBy}</span>
+                </div>
+              </div>
+
+              {/* Pending Approvals */}
+              <div>
+                <p className="text-sm font-medium text-gray-700 mb-2">Pending Approvals</p>
+                <div className="space-y-1">
+                  {signingChange.approvals.filter((a) => a.decision === 'Pending').map((approval) => (
+                    <div key={approval.id} className="flex items-center justify-between text-sm p-2 bg-yellow-50 rounded border border-yellow-200">
+                      <span className="font-medium text-gray-700">{approval.role}</span>
+                      <Clock className="w-4 h-4 text-yellow-500" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Signer Role */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Your Role / Capacity</label>
+                <select
+                  value={signatureRole}
+                  onChange={(e) => setSignatureRole(e.target.value)}
+                  className="input"
+                  title="Select your approval role"
+                >
+                  {signingChange.approvals
+                    .filter((a) => a.decision === 'Pending')
+                    .map((a) => <option key={a.id} value={a.role}>{a.role}</option>)
+                  }
+                  <option value="Quality">Quality</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Regulatory">Regulatory</option>
+                  <option value="Management">Management</option>
+                </select>
+              </div>
+
+              {/* Decision */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Decision</label>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSignatureDecision('Approved')}
+                    className={cn(
+                      'flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border font-medium text-sm transition-colors',
+                      signatureDecision === 'Approved'
+                        ? 'bg-green-100 text-green-700 border-green-300'
+                        : 'bg-white text-gray-600 border-surface-200 hover:bg-surface-50'
+                    )}
+                  >
+                    <CheckCircle className="w-4 h-4" />
+                    Approve
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSignatureDecision('Rejected')}
+                    className={cn(
+                      'flex-1 flex items-center justify-center gap-2 py-2 rounded-lg border font-medium text-sm transition-colors',
+                      signatureDecision === 'Rejected'
+                        ? 'bg-red-100 text-red-700 border-red-300'
+                        : 'bg-white text-gray-600 border-surface-200 hover:bg-surface-50'
+                    )}
+                  >
+                    <AlertTriangle className="w-4 h-4" />
+                    Reject
+                  </button>
+                </div>
+              </div>
+
+              {/* Comments */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Comments {signatureDecision === 'Rejected' && <span className="text-red-500">*</span>}
+                </label>
+                <textarea
+                  value={signatureComments}
+                  onChange={(e) => setSignatureComments(e.target.value)}
+                  className="input resize-none"
+                  rows={3}
+                  placeholder={signatureDecision === 'Rejected'
+                    ? 'Provide reason for rejection...'
+                    : 'Optional approval comments...'}
+                />
+              </div>
+
+              {/* Password / PIN */}
+              <div>
+                <label className="flex items-center gap-1 text-sm font-medium text-gray-700 mb-1">
+                  <Lock className="w-3 h-3" />
+                  Password Confirmation <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="password"
+                  value={signaturePassword}
+                  onChange={(e) => { setSignaturePassword(e.target.value); setSignatureError(''); }}
+                  className={cn('input', signatureError && 'border-red-300')}
+                  placeholder="Enter your account password to sign"
+                  autoComplete="current-password"
+                />
+                {signatureError && <p className="text-xs text-red-600 mt-1">{signatureError}</p>}
+                <p className="text-xs text-gray-500 mt-1">
+                  Per 21 CFR Part 11.50 — Electronic signatures require printed name, date/time, and meaning.
+                </p>
+              </div>
+
+              {/* 21 CFR Part 11 Notice */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-start gap-2">
+                <Shield className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs font-semibold text-blue-800">21 CFR Part 11 Electronic Signature</p>
+                  <p className="text-xs text-blue-700 mt-0.5">
+                    By signing, you certify that you are the named individual and that you are applying
+                    this signature with the intent to approve or reject the specified record. This action
+                    will be recorded in the immutable audit trail.
+                  </p>
+                </div>
+              </div>
+
+              {/* Signer Info */}
+              <div className="flex items-center gap-2 text-sm text-gray-600 bg-surface-50 rounded-lg p-3">
+                <User className="w-4 h-4 text-gray-400" />
+                <span>Signing as: <strong>Current User</strong></span>
+                <span className="text-gray-400">•</span>
+                <span>{new Date().toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div className="flex gap-3 p-5 border-t">
+              <button
+                type="button"
+                onClick={handleSignSubmit}
+                className={cn(
+                  'flex-1 btn-sm py-2 font-medium rounded-lg transition-colors',
+                  signatureDecision === 'Approved'
+                    ? 'bg-green-600 hover:bg-green-700 text-white'
+                    : 'bg-red-600 hover:bg-red-700 text-white'
+                )}
+              >
+                {signatureDecision === 'Approved' ? 'Apply Approval Signature' : 'Apply Rejection Signature'}
+              </button>
+              <button type="button" onClick={() => setShowSignModal(false)} className="btn-outline">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

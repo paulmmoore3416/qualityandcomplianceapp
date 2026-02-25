@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { cn, formatDate, daysUntil } from '../../lib/utils';
 import { Supplier, SupplierRiskLevel, SupplierStatus } from '../../types';
+import AddSupplierModal from '../modals/AddSupplierModal';
 
 // Sample data
 const sampleSuppliers: Supplier[] = [
@@ -120,9 +121,15 @@ export default function SupplierView() {
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
   const [showSupplierModal, setShowSupplierModal] = useState(false);
   const [showAuditModal, setShowAuditModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [auditSupplier, setAuditSupplier] = useState<Supplier | null>(null);
+  const [supplierList, setSupplierList] = useState<Supplier[]>(sampleSuppliers);
 
-  const suppliers = sampleSuppliers;
+  const suppliers = supplierList;
+
+  const handleAddSupplier = (newSupplier: Supplier) => {
+    setSupplierList((prev) => [...prev, newSupplier]);
+  };
 
   const filteredSuppliers = suppliers.filter((s) => {
     const matchesSearch =
@@ -188,7 +195,7 @@ export default function SupplierView() {
             Per ISO 13485:7.4 - Purchasing & Supplier Controls
           </p>
         </div>
-        <button className="btn-primary gap-2">
+        <button onClick={() => setShowAddModal(true)} className="btn-primary gap-2">
           <Plus className="w-4 h-4" />
           Add Supplier
         </button>
@@ -665,6 +672,14 @@ export default function SupplierView() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Add Supplier Modal */}
+      {showAddModal && (
+        <AddSupplierModal
+          onClose={() => setShowAddModal(false)}
+          onSave={handleAddSupplier}
+        />
       )}
 
       {/* ISO Reference */}
