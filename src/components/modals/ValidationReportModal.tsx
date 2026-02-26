@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAppStore } from '../../stores/app-store';
+import { useAuthStore } from '../../stores/auth-store';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { ValidationReportType, ValidationCategory, TestMethodType, TestResultOutcome } from '../../types';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,7 +10,8 @@ interface ValidationReportModalProps {
 }
 
 export default function ValidationReportModal({ onClose }: ValidationReportModalProps) {
-  const { addValidationReport } = useAppStore();
+  const { addValidationReport, addReportEntry } = useAppStore();
+  const { currentUser } = useAuthStore();
 
   // Section 1: Metadata
   const [reportType, setReportType] = useState<ValidationReportType>('EVT');
@@ -80,7 +82,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
 
     const reportNumber = `${reportType}-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 999) + 1).padStart(3, '0')}`;
 
-    addValidationReport({
+    const newReport = addValidationReport({
       reportNumber,
       title,
       type: reportType,
@@ -147,6 +149,17 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
       auditTrail: [],
     });
 
+    addReportEntry({
+      title,
+      reportNumber: newReport.reportNumber,
+      category: 'Validation Report',
+      section: 'Validation',
+      status: 'Draft',
+      createdBy: currentUser?.fullName || currentUser?.username || author,
+      referenceId: newReport.id,
+      summary: objective,
+    });
+
     onClose();
   };
 
@@ -156,7 +169,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-surface-200">
           <h2 className="text-lg font-semibold text-gray-900">New Engineering Validation Report</h2>
-          <button onClick={onClose} className="p-1 hover:bg-surface-100 rounded-md">
+          <button onClick={onClose} className="p-1 hover:bg-surface-100 rounded-md" title="Close">
             <X className="w-5 h-5 text-gray-500" />
           </button>
         </div>
@@ -169,7 +182,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Report Type *</label>
-                <select value={reportType} onChange={(e) => setReportType(e.target.value as ValidationReportType)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm">
+                <select value={reportType} onChange={(e) => setReportType(e.target.value as ValidationReportType)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm" title="Report type">
                   <option value="EVT">EVT - Engineering Validation</option>
                   <option value="DVT">DVT - Design Validation</option>
                   <option value="PVT">PVT - Production Validation</option>
@@ -178,14 +191,14 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-                <select value={category} onChange={(e) => setCategory(e.target.value as ValidationCategory)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm">
+                <select value={category} onChange={(e) => setCategory(e.target.value as ValidationCategory)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm" title="Report category">
                   <option value="Verification">Verification - &quot;Did I build it right?&quot;</option>
                   <option value="Validation">Validation - &quot;Did I build the right thing?&quot;</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Version</label>
-                <input type="text" value={version} onChange={(e) => setVersion(e.target.value)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm" />
+                <input type="text" value={version} onChange={(e) => setVersion(e.target.value)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm" title="Report version" />
               </div>
               <div className="col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
@@ -247,7 +260,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                   <div key={req.id} className="p-3 bg-surface-50 rounded-lg border border-surface-200">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-mono text-gray-500">{req.requirementId}</span>
-                      <button onClick={() => setRequirements(requirements.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700">
+                      <button onClick={() => setRequirements(requirements.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700" title="Remove requirement">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -259,7 +272,8 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                       </div>
                       <select value={req.category}
                         onChange={(e) => { const updated = [...requirements]; updated[idx] = { ...req, category: e.target.value }; setRequirements(updated); }}
-                        className="px-3 py-1.5 border border-surface-200 rounded text-sm">
+                        className="px-3 py-1.5 border border-surface-200 rounded text-sm"
+                        title="Requirement category">
                         <option value="Performance">Performance</option>
                         <option value="Safety">Safety</option>
                         <option value="Functional">Functional</option>
@@ -269,7 +283,8 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                       </select>
                       <select value={req.verificationMethod}
                         onChange={(e) => { const updated = [...requirements]; updated[idx] = { ...req, verificationMethod: e.target.value }; setRequirements(updated); }}
-                        className="px-3 py-1.5 border border-surface-200 rounded text-sm">
+                        className="px-3 py-1.5 border border-surface-200 rounded text-sm"
+                        title="Verification method">
                         <option value="Test">Test</option>
                         <option value="Inspection">Inspection</option>
                         <option value="Analysis">Analysis</option>
@@ -303,7 +318,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                   <div key={tm.id} className="p-3 bg-surface-50 rounded-lg border border-surface-200">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-mono text-gray-500">{tm.testMethodId}</span>
-                      <button onClick={() => setTestMethods(testMethods.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700">
+                      <button onClick={() => setTestMethods(testMethods.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700" title="Remove test method">
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -313,7 +328,8 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                         className="px-3 py-1.5 border border-surface-200 rounded text-sm" />
                       <select value={tm.type}
                         onChange={(e) => { const updated = [...testMethods]; updated[idx] = { ...tm, type: e.target.value as TestMethodType }; setTestMethods(updated); }}
-                        className="px-3 py-1.5 border border-surface-200 rounded text-sm">
+                        className="px-3 py-1.5 border border-surface-200 rounded text-sm"
+                        title="Test method type">
                         {['Functional', 'Environmental', 'Mechanical', 'Electrical', 'Software', 'Biocompatibility', 'Sterilization', 'Usability', 'EMC', 'Other'].map((t) => (
                           <option key={t} value={t}>{t}</option>
                         ))}
@@ -356,28 +372,31 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                   {testResults.map((tr, idx) => (
                     <div key={tr.id} className="p-3 bg-surface-50 rounded-lg border border-surface-200">
                       <div className="flex items-center justify-end mb-2">
-                        <button onClick={() => setTestResults(testResults.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700">
+                        <button onClick={() => setTestResults(testResults.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700" title="Remove test result">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                         <select value={tr.testMethodId}
                           onChange={(e) => { const updated = [...testResults]; updated[idx] = { ...tr, testMethodId: e.target.value }; setTestResults(updated); }}
-                          className="px-3 py-1.5 border border-surface-200 rounded text-sm">
+                          className="px-3 py-1.5 border border-surface-200 rounded text-sm"
+                          title="Test method">
                           {testMethods.map((tm) => (
                             <option key={tm.id} value={tm.id}>{tm.testMethodId} - {tm.title}</option>
                           ))}
                         </select>
                         <select value={tr.requirementId}
                           onChange={(e) => { const updated = [...testResults]; updated[idx] = { ...tr, requirementId: e.target.value }; setTestResults(updated); }}
-                          className="px-3 py-1.5 border border-surface-200 rounded text-sm">
+                          className="px-3 py-1.5 border border-surface-200 rounded text-sm"
+                          title="Requirement">
                           {requirements.map((r) => (
                             <option key={r.id} value={r.id}>{r.requirementId}</option>
                           ))}
                         </select>
                         <select value={tr.outcome}
                           onChange={(e) => { const updated = [...testResults]; updated[idx] = { ...tr, outcome: e.target.value as TestResultOutcome }; setTestResults(updated); }}
-                          className="px-3 py-1.5 border border-surface-200 rounded text-sm">
+                          className="px-3 py-1.5 border border-surface-200 rounded text-sm"
+                          title="Test outcome">
                           <option value="Pass">Pass</option>
                           <option value="Fail">Fail</option>
                           <option value="Conditional Pass">Conditional Pass</option>
@@ -408,7 +427,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Overall Conclusion</label>
-                  <select value={overallConclusion} onChange={(e) => setOverallConclusion(e.target.value as TestResultOutcome)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm">
+                  <select value={overallConclusion} onChange={(e) => setOverallConclusion(e.target.value as TestResultOutcome)} className="w-full px-3 py-2 border border-surface-200 rounded-lg text-sm" title="Overall conclusion">
                     <option value="Pass">Pass</option>
                     <option value="Fail">Fail</option>
                     <option value="Conditional Pass">Conditional Pass</option>
@@ -432,7 +451,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                       onChange={(e) => { const updated = [...nonConformances]; updated[idx] = e.target.value; setNonConformances(updated); }}
                       placeholder="Describe non-conformance..."
                       className="flex-1 px-3 py-1.5 border border-surface-200 rounded text-sm" />
-                    <button onClick={() => setNonConformances(nonConformances.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700">
+                    <button onClick={() => setNonConformances(nonConformances.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700" title="Remove non-conformance">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -449,7 +468,7 @@ export default function ValidationReportModal({ onClose }: ValidationReportModal
                       onChange={(e) => { const updated = [...recommendations]; updated[idx] = e.target.value; setRecommendations(updated); }}
                       placeholder="Describe recommendation..."
                       className="flex-1 px-3 py-1.5 border border-surface-200 rounded text-sm" />
-                    <button onClick={() => setRecommendations(recommendations.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700">
+                    <button onClick={() => setRecommendations(recommendations.filter((_, i) => i !== idx))} className="text-red-500 hover:text-red-700" title="Remove recommendation">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>

@@ -15,6 +15,7 @@ const NCRView = React.lazy(() => import('./components/views/NCRView'));
 const LifecycleView = React.lazy(() => import('./components/views/LifecycleView'));
 const AuditView = React.lazy(() => import('./components/views/AuditView'));
 const SettingsView = React.lazy(() => import('./components/views/SettingsView'));
+const ReportsView = React.lazy(() => import('./components/views/ReportsView'));
 const VigilanceView = React.lazy(() => import('./components/views/VigilanceView'));
 const SupplierView = React.lazy(() => import('./components/views/SupplierView'));
 const TrainingView = React.lazy(() => import('./components/views/TrainingView'));
@@ -77,6 +78,8 @@ function App() {
         return <AdminView />;
       case 'audit':
         return <AuditView />;
+      case 'reports':
+        return <ReportsView />;
       case 'settings':
         return <SettingsView />;
       case 'validation':

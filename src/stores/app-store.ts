@@ -16,6 +16,7 @@ import {
   ChangeControl,
   Complaint,
   DocumentMetadata,
+  ReportEntry,
 } from '../types';
 import { METRICS_CONFIG, getMetricStatus } from '../data/metrics-config';
 import {
@@ -50,10 +51,11 @@ interface AppState {
   complaints: Complaint[];
   documents: DocumentMetadata[];
   moduleLinks: ModuleLink[];
+  reportEntries: ReportEntry[];
 
   // UI State
   sidebarOpen: boolean;
-  activeView: 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics';
+  activeView: 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics' | 'reports';
   auditMode: boolean;
   selectedMetricId: string | null;
 
@@ -98,10 +100,15 @@ interface AppState {
   updateLot: (id: string, updates: Partial<Lot>) => void;
 
   // Validation Report Actions
-  addValidationReport: (report: Omit<ValidationReport, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  addValidationReport: (report: Omit<ValidationReport, 'id' | 'createdAt' | 'updatedAt'>) => ValidationReport;
   updateValidationReport: (id: string, updates: Partial<ValidationReport>) => void;
   getValidationStats: () => { total: number; draft: number; inProgress: number; underReview: number; approved: number; passRate: number; byType: Record<string, number> };
   getValidationReportById: (id: string) => ValidationReport | undefined;
+
+  // Report Center Actions
+  addReportEntry: (entry: Omit<ReportEntry, 'id' | 'createdAt'> & { createdAt?: Date }) => ReportEntry;
+  updateReportEntry: (id: string, updates: Partial<ReportEntry>) => void;
+  getReportEntries: () => ReportEntry[];
 
   // Supplier Actions
   addSupplier: (supplier: Omit<Supplier, 'id' | 'createdAt'>) => void;
@@ -150,6 +157,7 @@ export const useAppStore = create<AppState>()(
   complaints: [],
   documents: [],
   moduleLinks: [],
+  reportEntries: [],
 
   // Initial UI State
   sidebarOpen: true,
@@ -417,6 +425,7 @@ export const useAppStore = create<AppState>()(
       validationReports: [...state.validationReports, newReport],
     }));
     get().saveData();
+    return newReport;
   },
 
   updateValidationReport: (id, updates) => {
@@ -451,6 +460,37 @@ export const useAppStore = create<AppState>()(
 
   getValidationReportById: (id) => {
     return get().validationReports.find((r) => r.id === id);
+  },
+
+  // Report Center Actions
+  addReportEntry: (entry) => {
+    const newEntry: ReportEntry = {
+      ...entry,
+      id: uuidv4(),
+      createdAt: entry.createdAt ?? new Date(),
+    };
+
+    set((state) => ({
+      reportEntries: [...state.reportEntries, newEntry],
+    }));
+
+    get().saveData();
+    return newEntry;
+  },
+
+  updateReportEntry: (id, updates) => {
+    set((state) => ({
+      reportEntries: state.reportEntries.map((entry) =>
+        entry.id === id ? { ...entry, ...updates } : entry
+      ),
+    }));
+    get().saveData();
+  },
+
+  getReportEntries: () => {
+    return [...get().reportEntries].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   },
 
   // Supplier Actions
@@ -639,6 +679,7 @@ export const useAppStore = create<AppState>()(
             complaints: data.complaints || [],
             documents: data.documents || [],
             moduleLinks: data.moduleLinks || [],
+            reportEntries: data.reportEntries || [],
           });
         }
       } catch (error) {
@@ -696,6 +737,7 @@ export const useAppStore = create<AppState>()(
         complaints: state.complaints,
         documents: state.documents,
         moduleLinks: state.moduleLinks,
+        reportEntries: state.reportEntries,
       };
 
       try {
@@ -775,6 +817,7 @@ export const useAppStore = create<AppState>()(
         complaints: state.complaints,
         documents: state.documents,
         moduleLinks: state.moduleLinks,
+        reportEntries: state.reportEntries,
       }),
     }
   )

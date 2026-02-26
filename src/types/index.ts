@@ -239,6 +239,62 @@ export interface AuditReport {
   };
 }
 
+// ===============================
+// REPORT CENTER
+// ===============================
+
+export type ReportSection =
+  | 'Validation'
+  | 'Vigilance'
+  | 'Audit'
+  | 'Metrics'
+  | 'Risk'
+  | 'CAPA'
+  | 'NCR'
+  | 'Documents'
+  | 'Training'
+  | 'Change Control'
+  | 'Suppliers'
+  | 'Lifecycle'
+  | 'Other';
+
+export type ReportCategory =
+  | 'Validation Report'
+  | 'Regulatory Report'
+  | 'Audit Report'
+  | 'Risk Report'
+  | 'CAPA Report'
+  | 'NCR Report'
+  | 'Training Record'
+  | 'Document Report'
+  | 'Other';
+
+export type ReportStatus =
+  | 'Draft'
+  | 'In Progress'
+  | 'Under Review'
+  | 'Approved'
+  | 'Pending Submission'
+  | 'Submitted'
+  | 'Acknowledged'
+  | 'Closed';
+
+export interface ReportEntry {
+  id: string;
+  title: string;
+  reportNumber?: string;
+  category: ReportCategory;
+  section: ReportSection;
+  status: ReportStatus;
+  createdAt: Date;
+  createdBy: string;
+  referenceId?: string;
+  authority?: string;
+  reportType?: string;
+  dueDate?: Date;
+  summary?: string;
+}
+
 // Electron API Types
 export interface ElectronAPI {
   saveData: (key: string, data: unknown) => Promise<{ success: boolean; error?: string }>;

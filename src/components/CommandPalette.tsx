@@ -60,6 +60,7 @@ export default function CommandPalette() {
     { id: 'nav-training', title: 'Go to Training', icon: <GraduationCap className="w-4 h-4" />, category: 'navigation', action: () => setActiveView('training'), keywords: ['education', 'certification'] },
     { id: 'nav-change', title: 'Go to Change Control', icon: <ClipboardList className="w-4 h-4" />, category: 'navigation', action: () => setActiveView('changecontrol'), keywords: ['ecn', 'revision'] },
     { id: 'nav-validation', title: 'Go to Validation', icon: <FlaskConical className="w-4 h-4" />, category: 'navigation', action: () => setActiveView('validation'), keywords: ['evt', 'dvt', 'pvt', 'dvpr'] },
+    { id: 'nav-reports', title: 'Go to Reports', icon: <FileText className="w-4 h-4" />, category: 'navigation', action: () => setActiveView('reports'), keywords: ['report', 'register'] },
     { id: 'nav-vigilance', title: 'Go to Vigilance', icon: <Eye className="w-4 h-4" />, category: 'navigation', action: () => setActiveView('vigilance'), keywords: ['complaint', 'adverse'] },
     { id: 'nav-lifecycle', title: 'Go to Lifecycle', icon: <Factory className="w-4 h-4" />, category: 'navigation', action: () => setActiveView('lifecycle'), keywords: ['product', 'phase'] },
     { id: 'nav-ai', title: 'Go to AI Agents', icon: <Cpu className="w-4 h-4" />, category: 'navigation', action: () => setActiveView('aiagents'), keywords: ['llm', 'automation'] },

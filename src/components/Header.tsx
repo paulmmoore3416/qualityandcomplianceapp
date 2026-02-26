@@ -54,6 +54,7 @@ export default function Header() {
     aiagents: 'AI Agents',
     admin: 'Administration',
     validation: 'Validation Reports',
+    reports: 'Reports Center',
   };
 
   const handleExport = () => {

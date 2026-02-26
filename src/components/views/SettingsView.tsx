@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppStore } from '../../stores/app-store';
 import {
   Settings,
@@ -97,6 +97,92 @@ export default function SettingsView() {
   // Compliance
   const [deviceClassification, setDeviceClassification] = useState('Class III (High Risk)');
 
+  // Load persisted settings on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('medtech-settings');
+    if (!saved) return;
+    try {
+      const s = JSON.parse(saved);
+      if (s.companyName !== undefined) setCompanyName(s.companyName);
+      if (s.defaultUser !== undefined) setDefaultUser(s.defaultUser);
+      if (s.autoSave !== undefined) setAutoSave(s.autoSave);
+      if (s.language !== undefined) setLanguage(s.language);
+      if (s.timezone !== undefined) setTimezone(s.timezone);
+      if (s.dateFormat !== undefined) setDateFormat(s.dateFormat);
+      if (s.sessionTimeout !== undefined) setSessionTimeout(s.sessionTimeout);
+      if (s.mfaRequired !== undefined) setMfaRequired(s.mfaRequired);
+      if (s.maxLoginAttempts !== undefined) setMaxLoginAttempts(s.maxLoginAttempts);
+      if (s.lockoutDuration !== undefined) setLockoutDuration(s.lockoutDuration);
+      if (s.minPasswordLength !== undefined) setMinPasswordLength(s.minPasswordLength);
+      if (s.requireUppercase !== undefined) setRequireUppercase(s.requireUppercase);
+      if (s.requireNumbers !== undefined) setRequireNumbers(s.requireNumbers);
+      if (s.requireSpecial !== undefined) setRequireSpecial(s.requireSpecial);
+      if (s.passwordExpiry !== undefined) setPasswordExpiry(s.passwordExpiry);
+      if (s.theme !== undefined) setTheme(s.theme);
+      if (s.density !== undefined) setDensity(s.density);
+      if (s.sidebarCollapsed !== undefined) setSidebarCollapsed(s.sidebarCollapsed);
+      if (s.showBadges !== undefined) setShowBadges(s.showBadges);
+      if (s.animationsEnabled !== undefined) setAnimationsEnabled(s.animationsEnabled);
+      if (s.alertThreshold !== undefined) setAlertThreshold(s.alertThreshold);
+      if (s.emailAlerts !== undefined) setEmailAlerts(s.emailAlerts);
+      if (s.emailAddress !== undefined) setEmailAddress(s.emailAddress);
+      if (s.overdueAlerts !== undefined) setOverdueAlerts(s.overdueAlerts);
+      if (s.capaAlerts !== undefined) setCAPAAlerts(s.capaAlerts);
+      if (s.riskAlerts !== undefined) setRiskAlerts(s.riskAlerts);
+      if (s.certExpiryAlerts !== undefined) setCertExpiryAlerts(s.certExpiryAlerts);
+      if (s.trainingAlerts !== undefined) setTrainingAlerts(s.trainingAlerts);
+      if (s.regulatoryAlerts !== undefined) setRegulatoryAlerts(s.regulatoryAlerts);
+      if (s.reminderDays !== undefined) setReminderDays(s.reminderDays);
+      if (s.retentionYears !== undefined) setRetentionYears(s.retentionYears);
+      if (s.autoArchive !== undefined) setAutoArchive(s.autoArchive);
+      if (s.archiveAfterDays !== undefined) setArchiveAfterDays(s.archiveAfterDays);
+      if (s.auditLogLevel !== undefined) setAuditLogLevel(s.auditLogLevel);
+      if (s.requireReasonForChange !== undefined) setRequireReasonForChange(s.requireReasonForChange);
+      if (s.exportSchedule !== undefined) setExportSchedule(s.exportSchedule);
+      if (s.apiEnabled !== undefined) setApiEnabled(s.apiEnabled);
+      if (s.webhookUrl !== undefined) setWebhookUrl(s.webhookUrl);
+      if (s.webhookEvents !== undefined) setWebhookEvents(s.webhookEvents);
+      if (s.erpSystem !== undefined) setErpSystem(s.erpSystem);
+      if (s.ldapEnabled !== undefined) setLdapEnabled(s.ldapEnabled);
+      if (s.ldapServer !== undefined) setLdapServer(s.ldapServer);
+      if (s.deviceClassification !== undefined) setDeviceClassification(s.deviceClassification);
+    } catch {
+      // ignore malformed saved data
+    }
+  }, []);
+
+  // Apply theme to document whenever it changes
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('theme-transition');
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else if (theme === 'light') {
+      root.classList.remove('dark');
+    } else {
+      // system: follow OS preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) root.classList.add('dark');
+      else root.classList.remove('dark');
+    }
+    const t = setTimeout(() => root.classList.remove('theme-transition'), 400);
+    return () => clearTimeout(t);
+  }, [theme]);
+
+  // Apply density to document whenever it changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-density', density);
+  }, [density]);
+
+  // Apply animation preference whenever it changes
+  useEffect(() => {
+    if (animationsEnabled) {
+      document.documentElement.classList.remove('no-animations');
+    } else {
+      document.documentElement.classList.add('no-animations');
+    }
+  }, [animationsEnabled]);
+
   const tabs: { id: SettingsTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: 'general', label: 'General', icon: Settings },
     { id: 'security', label: 'Security', icon: Lock },
@@ -149,15 +235,24 @@ export default function SettingsView() {
   };
 
   const handleSaveSettings = () => {
-    // Save to localStorage
     const settings = {
+      // General
       companyName, defaultUser, autoSave, language, timezone, dateFormat,
+      // Security
       sessionTimeout, mfaRequired, maxLoginAttempts, lockoutDuration,
       minPasswordLength, requireUppercase, requireNumbers, requireSpecial, passwordExpiry,
+      // Appearance
       theme, density, sidebarCollapsed, showBadges, animationsEnabled,
+      // Notifications
       alertThreshold, emailAlerts, emailAddress,
+      overdueAlerts, capaAlerts, riskAlerts, certExpiryAlerts, trainingAlerts, regulatoryAlerts, reminderDays,
+      // Audit
       retentionYears, autoArchive, archiveAfterDays, auditLogLevel,
       requireReasonForChange, exportSchedule,
+      // Integrations
+      apiEnabled, webhookUrl, webhookEvents, erpSystem, ldapEnabled, ldapServer,
+      // Compliance
+      deviceClassification,
     };
     localStorage.setItem('medtech-settings', JSON.stringify(settings));
     setSaveStatus('saved');

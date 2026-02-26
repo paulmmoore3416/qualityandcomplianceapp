@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics';
+type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics' | 'reports';
 
 interface NavItem {
   id: ViewType;
@@ -59,6 +59,7 @@ export default function Sidebar() {
     { id: 'suppliers', label: 'Suppliers', icon: Truck, category: 'support' },
     { id: 'training', label: 'Training', icon: GraduationCap, category: 'support' },
     { id: 'documents', label: 'Documents', icon: FileText, category: 'support' },
+    { id: 'reports', label: 'Reports', icon: FileText, category: 'support' },
     { id: 'audit', label: 'Audit Mode', icon: Shield, category: 'core' },
     { id: 'admin', label: 'Admin Panel', icon: UserCog, category: 'support' },
     { id: 'settings', label: 'Settings', icon: Settings, category: 'support' },
@@ -189,6 +190,11 @@ export default function Sidebar() {
               <span className="badge-blue text-[10px]">ISO 14971</span>
               <span className="badge-blue text-[10px]">ISO 10993</span>
               <span className="badge-blue text-[10px]">ISO 9001</span>
+              <span className="badge-blue text-[10px]">IEC 62304</span>
+              <span className="badge-blue text-[10px]">ISO 15223</span>
+              <span className="badge-blue text-[10px]">ISO 17664</span>
+              <span className="badge-blue text-[10px]">ISO 11135</span>
+              <span className="badge-blue text-[10px]">ISO 11137</span>
             </div>
           </div>
         </div>

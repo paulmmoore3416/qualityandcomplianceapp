@@ -24,6 +24,8 @@ import {
   ComplaintSeverity,
   ComplaintStatus,
 } from '../../types';
+import { useAppStore } from '../../stores/app-store';
+import { useAuthStore } from '../../stores/auth-store';
 import ComplaintModal from '../modals/ComplaintModal';
 
 // Sample data for demonstration
@@ -106,6 +108,8 @@ type ActiveModal =
   | null;
 
 export default function VigilanceView() {
+  const { addReportEntry } = useAppStore();
+  const { currentUser } = useAuthStore();
   const [showComplaintModal, setShowComplaintModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'complaints' | 'adverse' | 'fsca' | 'pms'>('complaints');
   const [searchTerm, setSearchTerm] = useState('');
@@ -219,6 +223,20 @@ export default function VigilanceView() {
   };
 
   const handleRegulatoryReportSubmit = () => {
+    const complaint = activeModal && 'complaint' in activeModal ? activeModal.complaint : null;
+    addReportEntry({
+      title: reportDescription || `Regulatory ${reportType} Report`,
+      category: 'Regulatory Report',
+      section: 'Vigilance',
+      status: 'Pending Submission',
+      createdBy: currentUser?.fullName || currentUser?.username || 'Unknown User',
+      authority: reportAuthority,
+      reportType,
+      dueDate: reportDeadline ? new Date(reportDeadline) : undefined,
+      summary: complaint
+        ? `${complaint.referenceNumber} • ${complaint.title}`
+        : reportDescription || 'Regulatory reporting initiated',
+    });
     alert(`Regulatory Report initiated\nAuthority: ${reportAuthority}\nType: ${reportType} Report\nDeadline: ${reportDeadline}`);
     closeModal();
   };
