@@ -166,6 +166,88 @@ class ApiService {
   async getDetailedHealth() {
     return this.request<Record<string, unknown>>('/api/health/detailed');
   }
+
+  // ─── Dedicated Modules (typed tables) ───────────────────
+  async getModuleData(module: string, page = 1, limit = 100, status?: string) {
+    const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+    if (status) params.set('status', status);
+    return this.request<{ module: string; items: Record<string, unknown>[]; pagination: Record<string, number> }>(`/api/modules/${module}?${params.toString()}`);
+  }
+
+  async getModuleRecord(module: string, id: string) {
+    return this.request<Record<string, unknown>>(`/api/modules/${module}/${id}`);
+  }
+
+  async createModuleRecord(module: string, data: Record<string, unknown>) {
+    return this.request<Record<string, unknown>>(`/api/modules/${module}`, { method: 'POST', body: JSON.stringify(data) });
+  }
+
+  async updateModuleRecord(module: string, id: string, data: Record<string, unknown>) {
+    return this.request<Record<string, unknown>>(`/api/modules/${module}/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  }
+
+  async deleteModuleRecord(module: string, id: string) {
+    return this.request<{ message: string; id: string }>(`/api/modules/${module}/${id}`, { method: 'DELETE' });
+  }
+
+  // ─── System / Cockpit ───────────────────────────────────
+  async getSystemInfo() {
+    return this.request<Record<string, unknown>>('/api/system/info');
+  }
+
+  async getSystemMetrics() {
+    return this.request<Record<string, unknown>>('/api/system/metrics');
+  }
+
+  async getDbStats() {
+    return this.request<Record<string, unknown>>('/api/system/db-stats');
+  }
+
+  async getSites() {
+    return this.request<{ sites: Record<string, unknown>[] }>('/api/system/sites');
+  }
+
+  async createSite(data: Record<string, unknown>) {
+    return this.request<Record<string, unknown>>('/api/system/sites', { method: 'POST', body: JSON.stringify(data) });
+  }
+
+  async updateSite(id: string, data: Record<string, unknown>) {
+    return this.request<Record<string, unknown>>(`/api/system/sites/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  }
+
+  async deleteSite(id: string) {
+    return this.request<{ message: string }>(`/api/system/sites/${id}`, { method: 'DELETE' });
+  }
+
+  async getSystemLogs(limit = 100, level?: string) {
+    const params = new URLSearchParams({ limit: String(limit) });
+    if (level) params.set('level', level);
+    return this.request<{ logs: Record<string, unknown>[] }>(`/api/system/logs?${params.toString()}`);
+  }
+
+  async getSystemUsers() {
+    return this.request<{ users: Record<string, unknown>[] }>('/api/system/users');
+  }
+
+  async createSystemUser(data: Record<string, unknown>) {
+    return this.request<Record<string, unknown>>('/api/system/users', { method: 'POST', body: JSON.stringify(data) });
+  }
+
+  async updateSystemUser(id: string, data: Record<string, unknown>) {
+    return this.request<Record<string, unknown>>(`/api/system/users/${id}`, { method: 'PUT', body: JSON.stringify(data) });
+  }
+
+  async deleteSystemUser(id: string) {
+    return this.request<{ message: string }>(`/api/system/users/${id}`, { method: 'DELETE' });
+  }
+
+  async getActiveSessions() {
+    return this.request<{ sessions: Record<string, unknown>[]; count: number }>('/api/system/sessions');
+  }
+
+  async revokeSession(id: string) {
+    return this.request<{ message: string }>(`/api/system/sessions/${id}/revoke`, { method: 'POST' });
+  }
 }
 
 export class ApiError extends Error {

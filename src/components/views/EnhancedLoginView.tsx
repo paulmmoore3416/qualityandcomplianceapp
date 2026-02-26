@@ -193,11 +193,11 @@ export const EnhancedLoginView: React.FC = () => {
               Demo Credentials Available:
             </p>
             <div className="text-xs text-blue-800 space-y-1.5 grid grid-cols-2 gap-x-4">
-              <p><strong>Demo:</strong> demo / demo2026</p>
               <p><strong>Admin:</strong> admin / admin123</p>
+              <p><strong>T. Best:</strong> tjbest / tjbest2026</p>
               <p><strong>QA Mgr:</strong> qa_manager / qa123</p>
               <p><strong>Engineer:</strong> engineer / eng123</p>
-              <p className="col-span-2"><strong>Auditor:</strong> auditor / audit123</p>
+              <p className="col-span-2"><strong>Demo:</strong> demo / demo123</p>
             </div>
           </div>
 
@@ -211,10 +211,8 @@ export const EnhancedLoginView: React.FC = () => {
         {/* Footer */}
         <div className="mt-6 text-center text-surface-300 text-sm">
           <p className="font-medium">FDA 21 CFR Part 11 & Part 820 Compliant</p>
-          <p className="mt-2">© 2026 MedTech Compliance Solutions LLC</p>
-          <p className="text-xs mt-1 text-surface-400">
-            Katie Emma & Paul Moore • St. Louis, MO
-          </p>
+          <p className="mt-2">© 2026 MedTech Compliance Solutions</p>
+          <p className="text-xs mt-1 text-surface-400">A Moore Family Businesses LLC Subsidiary</p>
         </div>
       </div>
 

@@ -113,7 +113,8 @@ export const LoginView: React.FC = () => {
         {/* Footer */}
         <div className="mt-6 text-center text-surface-400 text-sm">
           <p>21 CFR Part 11 Compliant • ALCOA+ Data Integrity</p>
-          <p className="mt-2">© 2026 MedTech Compliance Suite</p>
+          <p className="mt-2">© 2026 MedTech Compliance Solutions</p>
+          <p className="text-xs mt-1">A Moore Family Businesses LLC Subsidiary</p>
         </div>
       </div>
     </div>

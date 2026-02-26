@@ -68,12 +68,16 @@ const complianceRoutes = require('./routes/compliance');
 const auditRoutes = require('./routes/audit');
 const exportRoutes = require('./routes/export');
 const healthRoutes = require('./routes/health');
+const systemRoutes = require('./routes/system');
+const modulesRoutes = require('./routes/modules');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/compliance', complianceRoutes);
 app.use('/api/audit', auditRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/health', healthRoutes);
+app.use('/api/system', systemRoutes);
+app.use('/api/modules', modulesRoutes);
 
 // ─── Serve Frontend in Production ────────────────────────────────────
 if (NODE_ENV === 'production') {
@@ -102,30 +106,37 @@ app.use((req, res) => {
 
 // ─── Start Server ───────────────────────────────────────────────────
 const server = app.listen(PORT, () => {
-  const crypto = require('crypto');
-  const jwtSecret = process.env.JWT_SECRET || 'change-me-in-production';
-  const mkPass = (u) => process.env[`SEED_${u.toUpperCase()}_PASSWORD`]
-    || crypto.createHmac('sha256', jwtSecret).update(u === 'qa_manager' ? 'qa_manager' : u).digest('hex').slice(0, 16);
+  const os = require('os');
+  const networkInterfaces = os.networkInterfaces();
+  let localIp = '127.0.0.1';
+  for (const iface of Object.values(networkInterfaces)) {
+    for (const alias of iface) {
+      if (alias.family === 'IPv4' && !alias.internal) { localIp = alias.address; break; }
+    }
+    if (localIp !== '127.0.0.1') break;
+  }
 
   console.log('');
-  console.log('═══════════════════════════════════════════════════════');
-  console.log('  MedTech Compliance Suite - Backend API Server');
-  console.log('═══════════════════════════════════════════════════════');
+  console.log('═══════════════════════════════════════════════════════════════');
+  console.log('  MedTech Compliance Solutions — A Moore Family Businesses LLC');
+  console.log('  Subsidiary — Backend API Server v2.0.0');
+  console.log('═══════════════════════════════════════════════════════════════');
   console.log(`  Environment : ${NODE_ENV}`);
+  console.log(`  Hostname    : ${os.hostname()}`);
+  console.log(`  IP Address  : ${localIp}`);
   console.log(`  API Server  : http://localhost:${PORT}`);
   console.log(`  Health Check: http://localhost:${PORT}/api/health`);
+  console.log(`  System Info : http://localhost:${PORT}/api/system/info  [Admin]`);
   if (NODE_ENV !== 'production') {
     console.log('');
-    console.log('  Seeded Accounts (set SEED_* env vars to override):');
-    console.log(`    admin      / ${mkPass('admin')}`);
-    console.log(`    qa_manager / ${mkPass('qa_manager')}`);
-    console.log(`    engineer   / ${mkPass('engineer')}`);
-    console.log(`    demo       / ${mkPass('demo')}`);
-    console.log('');
-    console.log('  ⚠  These are derived from JWT_SECRET. Set SEED_*');
-    console.log('     env vars for predictable demo passwords.');
+    console.log('  Demo Accounts:');
+    console.log(`    admin      / ${process.env.SEED_ADMIN_PASSWORD || 'admin123'}`);
+    console.log(`    tjbest     / ${process.env.SEED_TJBEST_PASSWORD || 'tjbest2026'}  (Tracy Best)`);
+    console.log(`    qa_manager / ${process.env.SEED_QA_PASSWORD || 'qa123'}`);
+    console.log(`    engineer   / ${process.env.SEED_ENGINEER_PASSWORD || 'eng123'}`);
+    console.log(`    demo       / ${process.env.SEED_DEMO_PASSWORD || 'demo123'}`);
   }
-  console.log('═══════════════════════════════════════════════════════');
+  console.log('═══════════════════════════════════════════════════════════════');
   console.log('');
 });
 

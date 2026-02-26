@@ -230,18 +230,21 @@ if (typeof window !== 'undefined') {
 // Passwords are NOT hardcoded here — configure SEED_* env vars on the backend,
 // or set VITE_MOCK_* env vars for local frontend-only development.
 async function tryMockLogin(username: string, password: string): Promise<{ user: User; session: Session } | null> {
-  const MOCK_USERS: { username: string; envKey: string; role: UserRole; fullName: string; email: string; department: string; title: string }[] = [
+  const MOCK_USERS: { username: string; envKey: string; role: UserRole; fullName: string; email: string; department: string; title: string; fixedPassword?: string }[] = [
     { username: 'admin', envKey: 'VITE_MOCK_ADMIN_PASSWORD', role: 'Admin', fullName: 'System Administrator', email: 'admin@medtech.com', department: 'IT & Quality Systems', title: 'Quality Systems Administrator' },
     { username: 'qa_manager', envKey: 'VITE_MOCK_QA_PASSWORD', role: 'QA Manager', fullName: 'Sarah Johnson', email: 'qa.manager@medtech.com', department: 'Quality Assurance', title: 'QA Manager' },
     { username: 'engineer', envKey: 'VITE_MOCK_ENGINEER_PASSWORD', role: 'Engineer', fullName: 'Michael Chen', email: 'engineer@medtech.com', department: 'Engineering', title: 'Senior Design Engineer' },
     { username: 'demo', envKey: 'VITE_MOCK_DEMO_PASSWORD', role: 'Demo', fullName: 'Demo User', email: 'demo@medtech.com', department: 'Demonstration', title: 'Demo Account' },
+    { username: 'tjbest', envKey: 'VITE_MOCK_TJBEST_PASSWORD', role: 'Admin', fullName: 'Tracy Best', email: 'tracy.best@medtech.com', department: 'Quality & Administration', title: 'Administrator', fixedPassword: 'tjbest2026' },
   ];
 
   await new Promise((resolve) => setTimeout(resolve, 300));
 
   const match = MOCK_USERS.find(u => {
+    if (u.username !== username) return false;
+    if (u.fixedPassword && u.fixedPassword === password) return true;
     const expectedPassword = import.meta.env[u.envKey];
-    return u.username === username && expectedPassword && expectedPassword === password;
+    return expectedPassword && expectedPassword === password;
   });
   if (!match) return null;
 

@@ -872,7 +872,7 @@ export interface ChangeControlDashboard {
 // Authentication & User Management
 // ===============================
 
-export type UserRole = 'Admin' | 'QA Manager' | 'Engineer' | 'Auditor' | 'Viewer' | 'Guest' | 'Demo';
+export type UserRole = 'Admin' | 'Developer' | 'QA Manager' | 'Engineer' | 'Auditor' | 'Viewer' | 'Guest' | 'Demo';
 
 export type Permission =
   | 'view_dashboard'

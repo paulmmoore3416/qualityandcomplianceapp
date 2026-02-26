@@ -22,10 +22,11 @@ import {
   User,
   FlaskConical,
   LineChart,
+  Monitor,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics' | 'reports';
+type ViewType = 'dashboard' | 'metrics' | 'risk' | 'capa' | 'ncr' | 'lifecycle' | 'audit' | 'settings' | 'vigilance' | 'suppliers' | 'training' | 'changecontrol' | 'documents' | 'aiagents' | 'admin' | 'validation' | 'analytics' | 'reports' | 'system';
 
 interface NavItem {
   id: ViewType;
@@ -62,15 +63,16 @@ export default function Sidebar() {
     { id: 'reports', label: 'Reports', icon: FileText, category: 'support' },
     { id: 'audit', label: 'Audit Mode', icon: Shield, category: 'core' },
     { id: 'admin', label: 'Admin Panel', icon: UserCog, category: 'support' },
+    { id: 'system', label: 'System Cockpit', icon: Monitor, category: 'support' },
     { id: 'settings', label: 'Settings', icon: Settings, category: 'support' },
   ];
 
   // Filter navigation items based on user role
-  // Only Admin users can access the Admin Panel
+  const isAdminOrDev = currentUser?.role === 'Admin' || currentUser?.role === 'Developer';
   const navItems = allNavItems.filter(item => {
-    if (item.id === 'admin') {
-      return currentUser?.role === 'Admin';
-    }
+    if (item.id === 'admin') return isAdminOrDev;
+    if (item.id === 'aiagents') return isAdminOrDev;
+    if (item.id === 'system') return isAdminOrDev;
     return true;
   });
 
@@ -196,6 +198,7 @@ export default function Sidebar() {
               <span className="badge-blue text-[10px]">ISO 11135</span>
               <span className="badge-blue text-[10px]">ISO 11137</span>
             </div>
+            <p className="text-[9px] text-gray-400 mt-2 leading-tight">© 2026 MedTech Compliance Solutions<br/>A Moore Family Businesses LLC Subsidiary</p>
           </div>
         </div>
       )}

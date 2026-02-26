@@ -72,7 +72,7 @@ ${record.status === 'Completed' ? 'The employee has demonstrated the necessary c
 ================================================================================
 
 Report Generated: ${formatDateTime(new Date())}
-MedTech Compliance Solutions LLC - Quality Management System
+MedTech Compliance Solutions - A Moore Family Businesses LLC Subsidiary
 ================================================================================
 `;
   };
@@ -273,7 +273,7 @@ MedTech Compliance Solutions LLC - Quality Management System
           {/* Footer */}
           <div className="text-center text-xs text-gray-500 border-t border-gray-200 pt-4">
             <p>Report Generated: {formatDateTime(new Date())}</p>
-            <p>MedTech Compliance Solutions LLC - Quality Management System</p>
+            <p>MedTech Compliance Solutions - A Moore Family Businesses LLC Subsidiary</p>
           </div>
         </div>
       </div>

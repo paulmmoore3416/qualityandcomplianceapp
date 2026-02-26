@@ -25,6 +25,7 @@ const AdminView = React.lazy(() => import('./components/views/AdminView'));
 const AIAgentsView = React.lazy(() => import('./components/views/AIAgentsView'));
 const ValidationView = React.lazy(() => import('./components/views/ValidationView'));
 const AnalyticsDashboard = React.lazy(() => import('./components/views/AnalyticsDashboard'));
+const SystemView = React.lazy(() => import('./components/views/SystemView'));
 import { EnhancedLoginView } from './components/views/EnhancedLoginView';
 
 // Initialize keyboard shortcuts on app load
@@ -86,6 +87,8 @@ function App() {
         return <ValidationView />;
       case 'analytics':
         return <AnalyticsDashboard />;
+      case 'system':
+        return <SystemView />;
       default:
         return <Dashboard />;
     }
