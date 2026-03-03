@@ -73,6 +73,8 @@ oauth-secrets.json
 *.sqlite
 *.sqlite3
 data/
+!src/data/
+!src/data/**
 user-data/
 server/data/
 
