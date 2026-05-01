@@ -29,7 +29,7 @@ qualityandcomplianceapp/
 │   ├── README.md                         # Project overview
 │   ├── INSTALLATION.md                   # Installation guide
 │   ├── CONTRIBUTING.md                   # Contribution guidelines
-│   ├── LICENSE                           # MIT License
+│   ├── LICENSE                           # Proprietary License
 │   ├── SECURITY.md                       # Security policy
 │   ├── SECURITY_FIXES.md                 # ✅ Critical fixes (NEW)
 │   ├── MEDIUM_SECURITY_FIXES.md          # ✅ Medium fixes (NEW)

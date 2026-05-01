@@ -20,7 +20,7 @@ setup(
         "Development Status :: 4 - Beta",
         "Intended Audience :: Healthcare Industry",
         "Topic :: Software Development :: Quality Assurance",
-        "License :: OSI Approved :: MIT License",
+        "License :: Other/Proprietary License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",

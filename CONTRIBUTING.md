@@ -455,7 +455,7 @@ Contributors will be recognized in:
 
 ## 📄 License
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+By contributing, you agree that your contributions will be owned by MedTech Compliance Solutions LLC and licensed under the project's proprietary license.
 
 ---
 

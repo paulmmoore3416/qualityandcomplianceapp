@@ -117,7 +117,7 @@ The `/templates` folder includes ready-to-use quality system templates:
 - **ISO/IEC Standards**: © ISO/IEC - Copyrighted material, purchase required
 - **FDA Regulations**: Public domain, freely available
 - **EU Regulations**: Public domain, freely available
-- **Templates**: © 2026 MedTech Compliance Solutions LLC - MIT License
+- **Templates**: © 2026 MedTech Compliance Solutions LLC - Proprietary
 
 ### Disclaimer
 

@@ -98,16 +98,6 @@ export const LoginView: React.FC = () => {
               {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
-
-          {/* Demo Credentials Notice */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-xs font-semibold text-blue-900 mb-2">
-              Demo Mode
-            </p>
-            <div className="text-xs text-blue-800 space-y-1">
-              <p>Demo accounts are available in development. Check documentation for setup instructions.</p>
-            </div>
-          </div>
         </div>
 
         {/* Footer */}

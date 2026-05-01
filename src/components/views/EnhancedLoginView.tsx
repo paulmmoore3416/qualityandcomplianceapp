@@ -186,21 +186,6 @@ export const EnhancedLoginView: React.FC = () => {
             </button>
           </div>
 
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gh-blue-strong/10 dark:to-gh-overlay border border-blue-200 dark:border-gh-blue-strong/30 rounded-lg">
-            <p className="text-xs font-semibold text-blue-900 mb-3 flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              Demo Credentials Available:
-            </p>
-            <div className="text-xs text-blue-800 space-y-1.5 grid grid-cols-2 gap-x-4">
-              <p><strong>Admin:</strong> admin / admin123</p>
-              <p><strong>T. Best:</strong> tjbest / tjbest2026</p>
-              <p><strong>QA Mgr:</strong> qa_manager / qa123</p>
-              <p><strong>Engineer:</strong> engineer / eng123</p>
-              <p className="col-span-2"><strong>Demo:</strong> demo / demo123</p>
-            </div>
-          </div>
-
           {/* Security Notice */}
           <div className="mt-4 text-center text-xs text-surface-500">
             <p>Protected by multi-factor authentication</p>

@@ -207,4 +207,4 @@ This risk assessment is conducted in accordance with ISO 14971:2019 to identify,
 ---
 
 **© 2026 MedTech Compliance Solutions LLC**
-*This template is provided under MIT License for use in quality management systems.*
+*This template is proprietary and provided for use in quality management systems under license from MedTech Compliance Solutions LLC.*

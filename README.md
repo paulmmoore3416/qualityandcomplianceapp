@@ -2,11 +2,11 @@
 
 <img src="public/logo.png" alt="MedTech Compliance Suite" width="200" />
 
-# MedTech Compliance Suite
+# MedTech Compliance Suite™
 
 ### Enterprise Grade Quality Management System for Medical Device Manufacturers
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Proprietary License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
 [![ISO 13485](https://img.shields.io/badge/ISO-13485:2016-0066CC.svg)](https://www.iso.org/standard/59752.html)
 [![ISO 14971](https://img.shields.io/badge/ISO-14971:2019-0066CC.svg)](https://www.iso.org/standard/72704.html)
 [![FDA 21 CFR 820](https://img.shields.io/badge/FDA-21%20CFR%20Part%20820-CC0000.svg)](https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?CFRPart=820)
@@ -358,7 +358,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 ## License
 
-**MIT License** — free for personal, commercial, and enterprise use. See [LICENSE](LICENSE).
+**PROPRIETARY** — © 2026 MedTech Compliance Solutions LLC. All Rights Reserved.  
+MedTech Compliance Suite™ is a trademark of MedTech Compliance Solutions LLC. 
+Unauthorized use or distribution is strictly prohibited. See [LICENSE](LICENSE) for terms.
 
 ### Enterprise & Professional Services
 
