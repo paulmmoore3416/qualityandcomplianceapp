@@ -90,6 +90,9 @@ ipcMain.handle('export-report', async (_event, content: string, filename: string
 
 // AI / Ollama related IPC handlers
 import { isOllamaInstalled, listOllamaModels, pullOllamaModel, runOllamaPrompt, mockRunPrompt } from './ai-service';
+import { ComplianceAgentService } from './compliance-agent-service';
+
+const complianceService = ComplianceAgentService.getInstance();
 
 ipcMain.handle('ai-is-installed', async () => {
   return await isOllamaInstalled();
@@ -117,7 +120,7 @@ ipcMain.handle('ai-run-prompt', async (_event, opts: { model: string; prompt: st
   return res;
 });
 
-// Simple in-memory agent manager for background tasks (mocking behavior)
+// Real agent management for Compliance Agent, mock for others
 interface AgentRuntime {
   id: string;
   interval?: NodeJS.Timer;
@@ -126,6 +129,10 @@ interface AgentRuntime {
 const agentRuntimes: Record<string, AgentRuntime> = {};
 
 ipcMain.handle('ai-start-agent', async (_event, agentId: string, scheduleMs: number) => {
+  if (agentId === 'agent-001') {
+    return await complianceService.start();
+  }
+  
   if (agentRuntimes[agentId]?.status === 'running') return { success: true };
   const rt: AgentRuntime = { id: agentId, status: 'running' };
   rt.interval = setInterval(() => {
@@ -137,6 +144,10 @@ ipcMain.handle('ai-start-agent', async (_event, agentId: string, scheduleMs: num
 });
 
 ipcMain.handle('ai-stop-agent', async (_event, agentId: string) => {
+  if (agentId === 'agent-001') {
+    return await complianceService.stop();
+  }
+
   const rt = agentRuntimes[agentId];
   if (rt?.interval) {
     clearInterval(rt.interval);
@@ -146,6 +157,29 @@ ipcMain.handle('ai-stop-agent', async (_event, agentId: string) => {
 });
 
 ipcMain.handle('ai-agent-status', async (_event, agentId: string) => {
+  if (agentId === 'agent-001') {
+    return { status: complianceService.getStatus() };
+  }
+
   const rt = agentRuntimes[agentId];
   return { status: rt?.status ?? 'stopped' };
+});
+
+ipcMain.handle('ai-agent-logs', async (_event, agentId: string) => {
+  if (agentId === 'agent-001') {
+    return complianceService.getLogs();
+  }
+  return [];
+});
+
+ipcMain.handle('ai-agent-command', async (_event, agentId: string, command: string) => {
+  if (agentId === 'agent-001') {
+    return await complianceService.runCommand(command);
+  }
+  return { success: false, error: 'Command not supported for this agent' };
+});
+
+// Ensure agent is stopped on quit
+app.on('before-quit', async () => {
+  await complianceService.stop();
 });

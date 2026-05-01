@@ -303,28 +303,6 @@ export interface ReportEntry {
   summary?: string;
 }
 
-// Electron API Types
-export interface ElectronAPI {
-  saveData: (key: string, data: unknown) => Promise<{ success: boolean; error?: string }>;
-  loadData: (key: string) => Promise<{ success: boolean; data?: unknown; error?: string }>;
-  exportReport: (content: string, filename: string) => Promise<{ success: boolean; path?: string; error?: string }>;
-
-  // AI API
-  aiIsInstalled: () => Promise<boolean>;
-  aiListModels: () => Promise<{ name: string; size?: string }[]>;
-  aiPullModel: (modelName: string) => Promise<{ success: boolean; message?: string }>;
-  aiRunPrompt: (opts: { model: string; prompt: string; temperature?: number; maxTokens?: number; timeoutMs?: number }) => Promise<{ success: boolean; output?: string; error?: string; mocked?: boolean }>;
-  aiStartAgent: (agentId: string, scheduleMs: number) => Promise<{ success: boolean }>; 
-  aiStopAgent: (agentId: string) => Promise<{ success: boolean }>;
-  aiAgentStatus: (agentId: string) => Promise<{ status: string }>;
-}
-
-declare global {
-  interface Window {
-    electronAPI?: ElectronAPI;
-  }
-}
-
 // ===============================
 // VIGILANCE & POST-MARKET SURVEILLANCE
 // ===============================

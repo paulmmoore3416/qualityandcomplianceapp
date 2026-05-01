@@ -14,6 +14,7 @@ import {
   Shield,
   Zap,
   X,
+  RefreshCw,
 } from 'lucide-react';
 import {
   AIAgent,
@@ -34,6 +35,31 @@ export const AIAgentsView: React.FC = () => {
   const [runResponse, setRunResponse] = useState<string | undefined>(undefined);
   const [runLoading, setRunLoading] = useState(false);
   const [testPromptText] = useState('Please summarize recent vigilance tasks and list top 3 recommended actions.');
+  const [logs, setLogs] = useState<string[]>([]);
+  const [showLogs, setShowLogs] = useState(false);
+
+  const fetchLogs = async (agentId: string) => {
+    try {
+      const result = await window.electronAPI.aiAgentLogs(agentId);
+      setLogs(result);
+    } catch (err) {
+      console.error('Failed to fetch logs', err);
+    }
+  };
+
+  const handleCommand = async (agentId: string, command: string) => {
+    setRunLoading(true);
+    setRunModalOpen(true);
+    setRunResponse(undefined);
+    try {
+      const res: { success: boolean; output: string; error?: string } = await window.electronAPI.aiAgentCommand(agentId, command);
+      setRunResponse(res.output + (res.error ? '\n\nERROR: ' + res.error : ''));
+    } catch (err) {
+      setRunResponse('Command failed: ' + String(err));
+    } finally {
+      setRunLoading(false);
+    }
+  };
   // Mock AI Agents data
   const agents: AIAgent[] = [
     {
@@ -477,6 +503,41 @@ export const AIAgentsView: React.FC = () => {
                 Start/Stop
               </button>
 
+              {selectedAgent === 'Vigilance Watchman' && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const agent = agents.find(a => a.type === selectedAgent);
+                      if (agent) {
+                        fetchLogs(agent.id);
+                        setShowLogs(true);
+                      }
+                    }}
+                    className="btn-sm btn-ghost"
+                  >
+                    View Logs
+                  </button>
+                  <button
+                    onClick={() => {
+                      const agent = agents.find(a => a.type === selectedAgent);
+                      if (agent) handleCommand(agent.id, 'validate');
+                    }}
+                    className="btn-sm btn-ghost"
+                  >
+                    Validate
+                  </button>
+                  <button
+                    onClick={() => {
+                      const agent = agents.find(a => a.type === selectedAgent);
+                      if (agent) handleCommand(agent.id, 'setup');
+                    }}
+                    className="btn-sm btn-ghost text-primary-600"
+                  >
+                    Setup
+                  </button>
+                </div>
+              )}
+
               <button
                 onClick={async () => {
                   const agent = agents.find(a => a.type === selectedAgent);
@@ -831,6 +892,52 @@ export const AIAgentsView: React.FC = () => {
           onClose={handleCloseSettings}
           onSave={handleSaveSettings}
         />
+      )}
+
+      <AIAgentRunModal
+        open={runModalOpen}
+        onClose={() => setRunModalOpen(false)}
+        title={agents.find(a => a.type === selectedAgent)?.name || 'Agent Run'}
+        response={runResponse}
+        loading={runLoading}
+      />
+
+      {showLogs && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b">
+              <div>
+                <h3 className="text-lg font-semibold">Agent Activity Logs</h3>
+                <p className="text-sm text-gray-500">Real-time status and background tasks</p>
+              </div>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => {
+                    const agent = agents.find(a => a.type === selectedAgent);
+                    if (agent) fetchLogs(agent.id);
+                  }} 
+                  className="btn-ghost btn-sm p-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                </button>
+                <button onClick={() => setShowLogs(false)} className="btn-ghost btn-sm p-2">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="p-4 bg-gray-900 text-green-400 font-mono text-xs overflow-auto flex-grow h-[60vh]">
+              {logs.length > 0 ? (
+                logs.map((log, i) => (
+                  <div key={i} className="mb-1 leading-relaxed border-l-2 border-green-900 pl-2">
+                    {log}
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-500 italic">No logs available for this agent session.</div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

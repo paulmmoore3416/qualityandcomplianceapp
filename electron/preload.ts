@@ -13,4 +13,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   aiStartAgent: (agentId: string, scheduleMs: number) => ipcRenderer.invoke('ai-start-agent', agentId, scheduleMs),
   aiStopAgent: (agentId: string) => ipcRenderer.invoke('ai-stop-agent', agentId),
   aiAgentStatus: (agentId: string) => ipcRenderer.invoke('ai-agent-status', agentId),
+  aiAgentLogs: (agentId: string) => ipcRenderer.invoke('ai-agent-logs', agentId),
+  aiAgentCommand: (agentId: string, command: string) => ipcRenderer.invoke('ai-agent-command', agentId, command),
 });

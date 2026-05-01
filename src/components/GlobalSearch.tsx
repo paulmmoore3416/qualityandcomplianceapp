@@ -211,6 +211,13 @@ export default function GlobalSearch({ isOpen, onClose, onNavigate }: GlobalSear
     }
   }, [isOpen]);
 
+  const handleSelect = useCallback((result: SearchResult) => {
+    saveRecentSearch(result.title);
+    onNavigate(result.type, result.id);
+    onClose();
+    setQuery('');
+  }, [onNavigate, onClose, saveRecentSearch]);
+
   // Keyboard navigation
   useEffect(() => {
     if (!isOpen) return;
@@ -241,13 +248,6 @@ export default function GlobalSearch({ isOpen, onClose, onNavigate }: GlobalSear
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, results, selectedIndex, onClose, handleSelect]);
-
-  const handleSelect = useCallback((result: SearchResult) => {
-    saveRecentSearch(result.title);
-    onNavigate(result.type, result.id);
-    onClose();
-    setQuery('');
-  }, [onNavigate, onClose, saveRecentSearch]);
 
   if (!isOpen) return null;
 

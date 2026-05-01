@@ -54,6 +54,7 @@ describe('Compliance Engine', () => {
     const mockMetric: Metric = {
       id: 'yield',
       name: 'Yield',
+      description: 'First pass yield',
       unit: '%',
       category: 'quality',
       target: 98,
