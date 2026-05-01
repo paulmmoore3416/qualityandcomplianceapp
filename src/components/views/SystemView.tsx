@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Server, Cpu, HardDrive, Wifi, Globe, Users, Activity, Shield,
-  RefreshCw, Plus, Trash2, Edit2, CheckCircle, AlertTriangle, XCircle,
+  RefreshCw, Plus, Trash2, Edit2, CheckCircle, XCircle,
   Database, Clock, Monitor, Network, BarChart3, FileText,
 } from 'lucide-react';
 import api from '../../services/api';
@@ -24,12 +24,6 @@ interface Site {
 }
 
 interface DbStats { tables: Record<string, number>; dbSizeMB: string }
-
-const STATUS_COLOR: Record<string, string> = {
-  Active: 'text-green-600 bg-green-50',
-  Warning: 'text-yellow-600 bg-yellow-50',
-  Offline: 'text-red-600 bg-red-50',
-};
 
 function StatusDot({ status }: { status: string }) {
   const color = status === 'Active' ? 'bg-green-500' : status === 'Warning' ? 'bg-yellow-500' : 'bg-red-500';

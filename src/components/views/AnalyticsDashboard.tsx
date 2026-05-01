@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import {
   BarChart3,
   TrendingUp,
-  TrendingDown,
   Activity,
   PieChart,
   Calendar,
@@ -11,12 +10,10 @@ import {
   RefreshCw,
   AlertTriangle,
   CheckCircle,
-  Clock,
   Target,
   Zap,
 } from 'lucide-react';
 import {
-  LineChart,
   Line,
   BarChart,
   Bar,
@@ -39,18 +36,10 @@ import {
 } from 'recharts';
 import { useAppStore } from '../../stores/app-store';
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
-
 export default function AnalyticsDashboard() {
   const {
     capas,
-    ncrs,
     riskAssessments,
-    validationReports,
-    suppliers,
-    trainingRecords,
-    changeControls,
-    getDashboardMetrics,
     getCAPAStats,
     getNCRStats,
     getSupplierStats,
@@ -59,7 +48,6 @@ export default function AnalyticsDashboard() {
     getValidationStats,
   } = useAppStore();
 
-  const metrics = getDashboardMetrics();
   const capaStats = getCAPAStats();
   const ncrStats = getNCRStats();
   const supplierStats = getSupplierStats();

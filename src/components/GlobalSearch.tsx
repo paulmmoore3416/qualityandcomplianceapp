@@ -76,11 +76,13 @@ export default function GlobalSearch({ isOpen, onClose, onNavigate }: GlobalSear
     }
   }, []);
 
-  const saveRecentSearch = (search: string) => {
-    const updated = [search, ...recentSearches.filter((s) => s !== search)].slice(0, 5);
-    setRecentSearches(updated);
-    localStorage.setItem('medtech-recent-searches', JSON.stringify(updated));
-  };
+  const saveRecentSearch = useCallback((search: string) => {
+    setRecentSearches((prev) => {
+      const updated = [search, ...prev.filter((s) => s !== search)].slice(0, 5);
+      localStorage.setItem('medtech-recent-searches', JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
 
   const performSearch = useCallback((searchQuery: string) => {
     if (!searchQuery.trim()) {
@@ -238,14 +240,14 @@ export default function GlobalSearch({ isOpen, onClose, onNavigate }: GlobalSear
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, results, selectedIndex, onClose]);
+  }, [isOpen, results, selectedIndex, onClose, handleSelect]);
 
-  const handleSelect = (result: SearchResult) => {
+  const handleSelect = useCallback((result: SearchResult) => {
     saveRecentSearch(result.title);
     onNavigate(result.type, result.id);
     onClose();
     setQuery('');
-  };
+  }, [onNavigate, onClose, saveRecentSearch]);
 
   if (!isOpen) return null;
 

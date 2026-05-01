@@ -18,15 +18,6 @@ import {
   User,
   CheckCircle,
   AlertCircle,
-  X,
-  Plus,
-  Filter,
-  MoreVertical,
-  Copy,
-  Archive,
-  History,
-  Star,
-  StarOff,
 } from 'lucide-react';
 import { DocumentMetadata, FileFormat, DocumentType, Permission, DocumentStatus } from '../../types';
 import { useAuthStore } from '../../stores/auth-store';
@@ -47,7 +38,6 @@ export const DocumentsView: React.FC = () => {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   const { currentUser, checkPermission } = useAuthStore();
 
@@ -332,27 +322,8 @@ export const DocumentsView: React.FC = () => {
     setShowUploadModal(true);
   };
 
-  const handleToggleFavorite = (documentId: string) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(documentId)) {
-        newFavorites.delete(documentId);
-      } else {
-        newFavorites.add(documentId);
-      }
-      return newFavorites;
-    });
-  };
-
-  const handleCloseModals = () => {
-    setShowDocumentModal(false);
-    setShowUploadModal(false);
-    setShowShareModal(false);
-    setShowEditModal(false);
-    setSelectedDocument(null);
-  };
-
   return (
+
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">

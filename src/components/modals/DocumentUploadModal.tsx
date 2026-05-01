@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { X, Upload, FileText, Tag, User } from 'lucide-react';
+import { X, Upload } from 'lucide-react';
 import { DocumentMetadata, DocumentType, FileFormat } from '../../types';
 
 interface DocumentUploadModalProps {

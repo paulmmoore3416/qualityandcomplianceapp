@@ -87,10 +87,12 @@ export function evaluateMetricRisk(
 
   // Status degradation triggers reassessment
   if (previousStatus && status !== previousStatus) {
-    if (
-      (previousStatus === 'green' && status !== 'green') ||
-      (previousStatus === 'yellow' && status === 'red')
-    ) {
+    const isWorse = 
+      (previousStatus === 'excellent' && (status === 'good' || status === 'warning' || status === 'critical')) ||
+      (previousStatus === 'good' && (status === 'warning' || status === 'critical')) ||
+      (previousStatus === 'warning' && status === 'critical');
+
+    if (isWorse) {
       return {
         requiresReassessment: true,
         reason: `Metric status degraded from ${previousStatus} to ${status}`,
@@ -99,11 +101,11 @@ export function evaluateMetricRisk(
     }
   }
 
-  // Critical metrics in red status always require review
-  if (status === 'red' && metric.riskImpact.includes('Critical')) {
+  // Critical metrics in critical status always require review
+  if (status === 'critical' && (metric.riskImpact?.includes('Critical') || metric.riskImpact?.includes('High'))) {
     return {
       requiresReassessment: true,
-      reason: `Critical metric ${metric.name} in red status`,
+      reason: `Critical metric ${metric.name} in critical status`,
       suggestedAction: `Immediate CAPA initiation per ISO 13485:8.5.2. Update risk controls per ISO 14971:7.1.`,
     };
   }
@@ -212,25 +214,25 @@ export function generateComplianceAlerts(
   const riskEvaluation = evaluateMetricRisk(metric, value, previousValue);
 
   // Generate alert based on status
-  if (status === 'red') {
+  if (status === 'critical') {
     alerts.push({
       id: uuidv4(),
       type: 'Critical',
-      title: `${metric.shortName} Critical Alert`,
+      title: `${metric.shortName || metric.name} Critical Alert`,
       message: `${metric.name} has reached critical threshold (${value}${metric.unit}). ${riskEvaluation.suggestedAction}`,
-      isoReference: metric.isoMappings[0],
+      isoReference: metric.isoMappings ? metric.isoMappings[0] : { standard: 'ISO 13485', clause: '8.4', description: 'Analysis of data' },
       linkedEntityType: 'Metric',
       linkedEntityId: metricId,
       timestamp: new Date(),
       acknowledged: false,
     });
-  } else if (status === 'yellow') {
+  } else if (status === 'warning') {
     alerts.push({
       id: uuidv4(),
       type: 'Warning',
-      title: `${metric.shortName} Warning`,
+      title: `${metric.shortName || metric.name} Warning`,
       message: `${metric.name} approaching threshold (${value}${metric.unit}). Review recommended.`,
-      isoReference: metric.isoMappings[0],
+      isoReference: metric.isoMappings ? metric.isoMappings[0] : { standard: 'ISO 13485', clause: '8.4', description: 'Analysis of data' },
       linkedEntityType: 'Metric',
       linkedEntityId: metricId,
       timestamp: new Date(),

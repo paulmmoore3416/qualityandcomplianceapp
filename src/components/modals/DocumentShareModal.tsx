@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, Users, Mail, Link, Copy, Check } from 'lucide-react';
+import { X, Send, Users, Link, Copy, Check } from 'lucide-react';
 import { DocumentMetadata } from '../../types';
 
 interface DocumentShareModalProps {

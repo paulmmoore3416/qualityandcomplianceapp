@@ -30,11 +30,10 @@ export const AIAgentsView: React.FC = () => {
   const [ragQuery, setRagQuery] = useState('');
   const [ragResponse, setRagResponse] = useState<AuditRAGQuery | null>(null);  const [settingsAgent, setSettingsAgent] = useState<AIAgent | null>(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
-  const [aiInstalled, setAiInstalled] = useState<boolean | null>(null);
   const [runModalOpen, setRunModalOpen] = useState(false);
   const [runResponse, setRunResponse] = useState<string | undefined>(undefined);
   const [runLoading, setRunLoading] = useState(false);
-  const [testPromptText, setTestPromptText] = useState('Please summarize recent vigilance tasks and list top 3 recommended actions.');
+  const [testPromptText] = useState('Please summarize recent vigilance tasks and list top 3 recommended actions.');
   // Mock AI Agents data
   const agents: AIAgent[] = [
     {

@@ -45,25 +45,33 @@ export interface RiskAssessment {
 }
 
 // Metric Categories
-export type MetricCategory = 'Quality' | 'Compliance' | 'Operational' | 'Financial';
+export type MetricCategory = 'quality' | 'compliance' | 'risk' | 'training' | 'supplier';
+export type MetricStatus = 'excellent' | 'good' | 'warning' | 'critical' | 'unknown';
 
 export interface Metric {
   id: string;
   name: string;
-  shortName: string;
-  category: MetricCategory;
   description: string;
-  formula: string;
   unit: string;
-  isoMappings: ISOMapping[];
-  riskImpact: string;
-  threshold: {
+  category: MetricCategory;
+  target?: number;
+  warningThreshold?: number;
+  criticalThreshold?: number;
+  higherIsBetter: boolean;
+  isoReferences?: string[];
+  
+  // Legacy/Extended fields
+  shortName?: string;
+  formula?: string;
+  isoMappings?: ISOMapping[];
+  riskImpact?: string;
+  threshold?: {
     green: number;
     yellow: number;
     red: number;
     direction: 'higher-better' | 'lower-better';
   };
-  workaroundSuggestion: string;
+  workaroundSuggestion?: string;
 }
 
 export interface MetricValue {
@@ -592,17 +600,26 @@ export interface DigitalSignature {
 // ===============================
 
 export type DocumentType =
+  | 'Engineering Drawing'
   | 'CAD Model'
+  | 'Visio Diagram'
+  | 'Specification'
+  | 'Test Report'
+  | 'Risk Analysis'
   | 'Design History File'
-  | 'Process Instruction'
-  | 'Quality Manual'
   | 'SOP'
   | 'Work Instruction'
-  | 'Specification'
-  | 'Test Method'
   | 'Validation Protocol'
-  | 'Risk Management File'
+  | 'Validation Report'
   | 'Technical File'
+  | 'User Manual'
+  | 'IFU'
+  | 'Label Artwork'
+  | 'Certificate'
+  | 'Process Instruction'
+  | 'Quality Manual'
+  | 'Test Method'
+  | 'Risk Management File'
   | 'Regulatory Submission'
   | 'Training Material'
   | 'Audit Report'
@@ -963,83 +980,6 @@ export interface RoleDefinition {
 // ===============================
 // Enhanced Document Control (eDMS)
 // ===============================
-
-export type DocumentType =
-  | 'Engineering Drawing'
-  | 'CAD Model'
-  | 'Visio Diagram'
-  | 'Specification'
-  | 'Test Report'
-  | 'Risk Analysis'
-  | 'Design History File'
-  | 'SOP'
-  | 'Work Instruction'
-  | 'Validation Protocol'
-  | 'Validation Report'
-  | 'Technical File'
-  | 'User Manual'
-  | 'IFU'
-  | 'Label Artwork'
-  | 'Certificate'
-  | 'Other';
-
-export type FileFormat =
-  | 'DWG'
-  | 'DXF'
-  | 'STEP'
-  | 'IGES'
-  | 'STL'
-  | 'VSDX'
-  | 'VSD'
-  | 'PDF'
-  | 'DOCX'
-  | 'XLSX'
-  | 'PPTX'
-  | 'PNG'
-  | 'JPG'
-  | 'SVG'
-  | 'Other';
-
-export interface DocumentMetadata {
-  id: string;
-  documentNumber: string;
-  title: string;
-  description: string;
-  type: DocumentType;
-  format: FileFormat;
-  revision: string;
-  status: 'Draft' | 'In Review' | 'Approved' | 'Obsolete' | 'Superseded';
-  effectiveDate?: Date;
-  expirationDate?: Date;
-  author: string;
-  reviewers: string[];
-  approvers: string[];
-  owner: string;
-  department: string;
-  tags: string[];
-  relatedProducts: string[];
-  isoReferences: ISOMapping[];
-  linkedDocuments: string[];
-  linkedChangeControls: string[];
-  filePath: string;
-  fileSize: number;
-  checksum: string;
-  version: number;
-  createdAt: Date;
-  updatedAt: Date;
-  accessControl: DocumentAccessControl;
-}
-
-export interface DocumentAccessControl {
-  isRestricted: boolean;
-  allowedRoles: UserRole[];
-  allowedUsers: string[];
-  requiresAuthentication: boolean;
-  viewPermissions: string[];
-  editPermissions: string[];
-  deletePermissions: string[];
-  sharePermissions: string[];
-}
 
 export interface DocumentRevision {
   id: string;

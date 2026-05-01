@@ -1,6 +1,7 @@
 {
   "name": "medtech-compliance-suite",
   "version": "1.0.0",
+  "type": "module",
   "description": "Professional Medical Device Manufacturing Metrics & Compliance Tool",
   "main": "electron/main.js",
   "scripts": {
