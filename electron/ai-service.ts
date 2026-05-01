@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { exec, spawn } from 'child_process';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
@@ -62,28 +62,71 @@ export async function pullOllamaModel(modelName: string): Promise<{ success: boo
 }
 
 export async function runOllamaPrompt(options: { model: string; prompt: string; temperature?: number; maxTokens?: number; timeoutMs?: number }): Promise<{ success: boolean; output?: string; error?: string }> {
-  const { model, prompt, temperature = 0.2, maxTokens = 1024 } = options;
-  // For portability, use `ollama run` which prints response to stdout
-  // Use --json on newer versions if available
-  try {
-    // Prepare command, ensure prompt is passed safely by using --prompt and quoting
-    const cmd = `ollama run ${model} --json --prompt ${JSON.stringify(prompt)} --temp ${temperature} --max-tokens ${maxTokens}`;
-    const { stdout } = await execAsync(cmd, { timeout: (options.timeoutMs || 30000) });
-
-    // Parse json if possible
-    try {
-      const parsed = JSON.parse(stdout);
-      // parsed could be { output: '...' } or array
-      if (typeof parsed === 'string') return { success: true, output: parsed };
-      if (Array.isArray(parsed)) return { success: true, output: parsed.map((p) => (p.output || JSON.stringify(p))).join('\n') };
-      if (parsed && (parsed.output || parsed.text)) return { success: true, output: parsed.output || parsed.text };
-      return { success: true, output: String(stdout) };
-    } catch (_) {
-      return { success: true, output: stdout };
-    }
-  } catch (err: any) {
-    return { success: false, error: err?.message || String(err) };
+  const { model, prompt, temperature = 0.2, maxTokens = 1024, timeoutMs = 30000 } = options;
+  
+  // SECURITY: Validate model name to prevent command injection
+  if (!/^[a-zA-Z0-9_-]+:[a-zA-Z0-9_.-]+$/.test(model)) {
+    return { success: false, error: 'Invalid model name format. Must be name:tag (e.g., llama2:13b)' };
   }
+  
+  // SECURITY: Validate temperature and maxTokens
+  if (temperature < 0 || temperature > 2) {
+    return { success: false, error: 'Temperature must be between 0 and 2' };
+  }
+  
+  if (maxTokens < 1 || maxTokens > 32000) {
+    return { success: false, error: 'Max tokens must be between 1 and 32000' };
+  }
+  
+  // Use spawn instead of exec to avoid shell injection
+  return new Promise((resolve) => {
+    const args = ['run', model];
+    
+    const child = spawn('ollama', args, {
+      timeout: timeoutMs,
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+    
+    let output = '';
+    let errorOutput = '';
+    
+    child.stdout.on('data', (data: any) => {
+      output += data.toString();
+    });
+    
+    child.stderr.on('data', (data: any) => {
+      errorOutput += data.toString();
+    });
+    
+    child.on('close', (code: number) => {
+      if (code === 0) {
+        try {
+          const parsed = JSON.parse(output);
+          if (typeof parsed === 'string') {
+            resolve({ success: true, output: parsed });
+          } else if (Array.isArray(parsed)) {
+            resolve({ success: true, output: parsed.map((p) => (p.output || JSON.stringify(p))).join('\n') });
+          } else if (parsed && (parsed.output || parsed.text)) {
+            resolve({ success: true, output: parsed.output || parsed.text });
+          } else {
+            resolve({ success: true, output: String(output) });
+          }
+        } catch (_) {
+          resolve({ success: true, output });
+        }
+      } else {
+        resolve({ success: false, error: errorOutput || `Process exited with code ${code}` });
+      }
+    });
+    
+    child.on('error', (err: Error) => {
+      resolve({ success: false, error: err.message });
+    });
+    
+    // SECURITY: Send prompt via stdin to avoid command line injection
+    child.stdin.write(prompt);
+    child.stdin.end();
+  });
 }
 
 // Simple mock fallback for dev when Ollama not available

@@ -44,8 +44,17 @@ const authLimiter = rateLimit({
   message: { error: 'Too many authentication attempts, please try again later' },
 });
 
+const systemLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100, // limit system/admin endpoints
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many system requests, please try again later' },
+});
+
 app.use('/api/', apiLimiter);
 app.use('/api/auth/login', authLimiter);
+app.use('/api/system', systemLimiter);
 
 // ─── Body Parsing ────────────────────────────────────────────────────
 app.use(express.json({ limit: '10mb' }));

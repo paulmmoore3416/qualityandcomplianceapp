@@ -19,7 +19,9 @@ const loginValidation = [
     .matches(/^[a-zA-Z0-9_.-]+$/).withMessage('Username contains invalid characters'),
   body('password')
     .notEmpty().withMessage('Password is required')
-    .isLength({ min: 4, max: 128 }).withMessage('Password must be 4-128 characters'),
+    .isLength({ min: 12, max: 128 }).withMessage('Password must be 12-128 characters')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .withMessage('Password must contain uppercase, lowercase, number, and special character (@$!%*?&)'),
   handleValidationErrors,
 ];
 
