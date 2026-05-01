@@ -24,7 +24,7 @@ export const AIAgentSettingsModal: React.FC<AIAgentSettingsModalProps> = ({
     }
   }, [agent]);
 
-  const handleSettingChange = (key: string, value: any) => {
+  const handleSettingChange = (key: string, value: string | number | boolean) => {
     setSettings(prev => ({ ...prev, [key]: value }));
     setHasChanges(true);
   };
@@ -193,14 +193,14 @@ export const AIAgentSettingsModal: React.FC<AIAgentSettingsModalProps> = ({
                     onClick={async () => {
                       // open model picker (fetch available models)
                       try {
-                        const models: any[] = await window.electronAPI.aiListModels();
+                        const models: { name: string }[] = await window.electronAPI.aiListModels();
                         const names = models.map((m) => m.name).filter(Boolean);
                         const pick = window.prompt('Available models:\n' + names.join('\n') + '\n\nEnter model name to select/pull:');
                         if (pick) {
                           handleSettingChange('modelName', pick);
                           const shouldPull = window.confirm('Pull model "' + pick + '" now? (This may download several GB)');
                           if (shouldPull) {
-                            const res: any = await window.electronAPI.aiPullModel(pick);
+                            const res: { success: boolean; message?: string } = await window.electronAPI.aiPullModel(pick);
                             if (!res.success) alert('Model pull failed: ' + (res.message || 'unknown'));
                             else alert('Model pulled successfully');
                           }

@@ -25,7 +25,7 @@ export async function listOllamaModels(): Promise<ModelInfo[]> {
     try {
       const parsed = JSON.parse(stdout);
       if (Array.isArray(parsed)) {
-        return parsed.map((m: any) => ({ name: m.name || m.model || m }));
+        return parsed.map((m: { name?: string; model?: string }) => ({ name: m.name || m.model || String(m) }));
       }
     } catch (_) {
       // Fallback to parse lines
@@ -56,8 +56,8 @@ export async function pullOllamaModel(modelName: string): Promise<{ success: boo
     // Use `ollama pull <model>` if available
     await execAsync(`ollama pull ${modelName}`);
     return { success: true };
-  } catch (err: any) {
-    return { success: false, message: err?.message || String(err) };
+  } catch (err: unknown) {
+    return { success: false, message: err instanceof Error ? err.message : String(err) };
   }
 }
 
@@ -90,11 +90,11 @@ export async function runOllamaPrompt(options: { model: string; prompt: string; 
     let output = '';
     let errorOutput = '';
     
-    child.stdout.on('data', (data: any) => {
+    child.stdout.on('data', (data: Buffer) => {
       output += data.toString();
     });
     
-    child.stderr.on('data', (data: any) => {
+    child.stderr.on('data', (data: Buffer) => {
       errorOutput += data.toString();
     });
     

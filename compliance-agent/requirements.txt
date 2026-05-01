@@ -1,0 +1,40 @@
+# IBM watsonx.ai
+ibm-watsonx-ai>=1.0.0
+
+# Ollama
+ollama>=0.1.0
+
+# LangChain and RAG
+langchain>=0.1.0
+langchain-community>=0.0.20
+langchain-chroma>=0.1.0
+langchain-text-splitters>=0.0.1
+
+# File monitoring
+watchdog>=3.0.0
+
+# Configuration
+python-dotenv>=1.0.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Progress bars
+tqdm>=4.66.0
+
+# Data processing
+numpy>=1.24.0
+
+# Testing (optional)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+
+# Type checking (optional)
+mypy>=1.5.0
+types-requests>=2.31.0
+
+# Code quality (optional)
+black>=23.7.0
+flake8>=6.1.0
+isort>=5.12.0

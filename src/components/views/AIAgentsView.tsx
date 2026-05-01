@@ -463,7 +463,7 @@ export const AIAgentsView: React.FC = () => {
                 onClick={async () => {
                   const agent = agents.find(a => a.type === selectedAgent);
                   if (!agent) return;
-                  const status: any = await window.electronAPI.aiAgentStatus(agent.id);
+                  const status = (await window.electronAPI.aiAgentStatus(agent.id)) as { status: string };
                   const shouldToggle = status?.status !== 'running';
                   if (shouldToggle) {
                     await window.electronAPI.aiStartAgent(agent.id, 60000);
@@ -487,7 +487,13 @@ export const AIAgentsView: React.FC = () => {
                   setRunResponse(undefined);
                   const prompt = `${agent.configuration?.systemPrompt || ''}\n\n${testPromptText}`;
                   try {
-                    const res: any = await window.electronAPI.aiRunPrompt({ model: agent.configuration?.modelName || 'mock', prompt, temperature: agent.configuration?.temperature || 0.2, maxTokens: agent.configuration?.maxTokens || 1024, timeoutMs: agent.configuration?.timeout || 15000 });
+                    const res = (await window.electronAPI.aiRunPrompt({ 
+                      model: agent.configuration?.modelName || 'mock', 
+                      prompt, 
+                      temperature: agent.configuration?.temperature || 0.2, 
+                      maxTokens: agent.configuration?.maxTokens || 1024, 
+                      timeoutMs: agent.configuration?.timeout || 15000 
+                    })) as { success: boolean; output?: string; error?: string };
                     setRunResponse(res.output || res.error || JSON.stringify(res));
                   } catch (err) {
                     setRunResponse('Error running prompt: ' + String(err));

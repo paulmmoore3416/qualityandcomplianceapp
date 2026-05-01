@@ -105,7 +105,7 @@ ipcMain.handle('ai-pull-model', async (_event, modelName: string) => {
   return res;
 });
 
-ipcMain.handle('ai-run-prompt', async (_event, opts: any) => {
+ipcMain.handle('ai-run-prompt', async (_event, opts: { model: string; prompt: string; temperature?: number; maxTokens?: number; timeoutMs?: number }) => {
   const installed = await isOllamaInstalled();
   if (!installed) {
     // Use mock response

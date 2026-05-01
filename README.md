@@ -34,6 +34,7 @@
 | **AI powered intelligence** | Local LLM agents (Ollama) for risk prediction, complaint analysis, and audit readiness queries |
 | **21 CFR Part 11 compliant** | Electronic signatures, immutable audit logs, ALCOA+ data integrity |
 | **Open source & self-hosted** | Full control over your data — no SaaS lock-in, no telemetry |
+| **Automated compliance monitoring** | Real-time code analysis with hybrid AI (Ollama + watsonx.ai) |
 | **Production ready security** | bcrypt passwords, rate limiting, CORS, Helmet, account lockout |
 
 ### Business Impact

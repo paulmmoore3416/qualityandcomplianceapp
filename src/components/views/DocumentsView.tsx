@@ -28,7 +28,7 @@ import {
   Star,
   StarOff,
 } from 'lucide-react';
-import { DocumentMetadata, FileFormat, DocumentType } from '../../types';
+import { DocumentMetadata, FileFormat, DocumentType, Permission, DocumentStatus } from '../../types';
 import { useAuthStore } from '../../stores/auth-store';
 import { DocumentViewerModal } from '../modals/DocumentViewerModal';
 import { DocumentEditorModal } from '../modals/DocumentEditorModal';
@@ -289,7 +289,7 @@ export const DocumentsView: React.FC = () => {
     const hasRole = doc.accessControl.allowedRoles.includes(currentUser.role);
     const isAllowedUser = doc.accessControl.allowedUsers.includes(currentUser.id);
     const hasPermission = doc.accessControl.viewPermissions.every((perm) =>
-      checkPermission(perm as any)
+      checkPermission(perm as Permission)
     );
 
     return (hasRole || isAllowedUser) && hasPermission;
@@ -301,7 +301,7 @@ export const DocumentsView: React.FC = () => {
     const hasRole = doc.accessControl.allowedRoles.includes(currentUser.role);
     const isAllowedUser = doc.accessControl.allowedUsers.includes(currentUser.id);
     const hasPermission = doc.accessControl.editPermissions.every((perm) =>
-      checkPermission(perm as any)
+      checkPermission(perm as Permission)
     );
 
     return (hasRole || isAllowedUser) && hasPermission;
@@ -453,7 +453,7 @@ export const DocumentsView: React.FC = () => {
             </select>
             <select
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as any)}
+              onChange={(e) => setFilterStatus(e.target.value as DocumentStatus | 'All')}
               className="px-4 py-2 border border-surface-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="All">All Status</option>

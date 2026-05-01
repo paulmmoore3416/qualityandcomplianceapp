@@ -93,10 +93,11 @@ export default function MetricEntryModal({ onClose, preselectedMetricId }: Metri
       case 'M005':
         value = calculateLAR(numInputs.releasedLots, numInputs.totalLots);
         break;
-      case 'M010':
+      case 'M010': {
         const oeeResult = calculateOEE(numInputs.availability, numInputs.performance, numInputs.quality);
         value = oeeResult.oee;
         break;
+      }
       case 'M019':
         value = calculateScrapRate(numInputs.scrapValue, numInputs.totalMaterialValue);
         break;

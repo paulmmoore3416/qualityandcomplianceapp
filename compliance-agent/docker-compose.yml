@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  compliance-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: compliance-agent
+    volumes:
+      # Mount parent directory as repository
+      - ..:/repo:ro
+      # Persist vector database
+      - ./chroma_db:/app/chroma_db
+      # Persist compliance reports
+      - ./compliance-reports:/app/compliance-reports
+      # Persist logs
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    environment:
+      # Override paths for Docker environment
+      - REPO_PATH=/repo
+      - CHROMA_DB_PATH=/app/chroma_db
+      - REPORTS_DIR=/app/compliance-reports
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    extra_hosts:
+      # Allow container to access host's Ollama
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    networks:
+      - compliance-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+
+networks:
+  compliance-network:
+    driver: bridge
+
+# Made with Bob
