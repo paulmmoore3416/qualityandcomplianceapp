@@ -1,0 +1,18 @@
+# Our security policy
+Contact: mailto:paulmmoore3416@gmail.com
+Contact: https://github.com/paulmmoore3416/qualityandcomplianceapp/security
+Expires: 2027-05-01T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://medtechcompliance.com/.well-known/security.txt
+
+# Security Disclosure Policy
+Policy: https://github.com/paulmmoore3416/qualityandcomplianceapp/blob/main/SECURITY.md
+
+# Acknowledgments
+Acknowledgments: https://github.com/paulmmoore3416/qualityandcomplianceapp/blob/main/SECURITY.md#acknowledgments
+
+# Encryption
+Encryption: https://keys.openpgp.org/search?q=paulmmoore3416@gmail.com
+
+# Hiring
+Hiring: https://moorefamilybusinesses.com/careers

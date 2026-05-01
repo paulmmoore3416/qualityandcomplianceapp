@@ -96,4 +96,7 @@ id_rsa.pub
 
 # API keys and tokens
 api-keys.txt
+
+# Business and marketing documents (private)
+businessmarketing/
 tokens.txt

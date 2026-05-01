@@ -50,7 +50,8 @@ function initializeDatabase() {
   db.exec(`CREATE TABLE IF NOT EXISTS audit_trail (
     id TEXT PRIMARY KEY, action TEXT NOT NULL, entity_type TEXT, entity_id TEXT,
     previous_value TEXT, new_value TEXT, iso_clause TEXT, user_id TEXT,
-    user_name TEXT, ip_address TEXT, timestamp TEXT NOT NULL, session_id TEXT
+    user_name TEXT, ip_address TEXT, timestamp TEXT NOT NULL, session_id TEXT,
+    integrity_hash TEXT
   )`);
 
   db.exec(`CREATE TABLE IF NOT EXISTS compliance_data (
